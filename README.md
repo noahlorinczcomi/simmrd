@@ -23,26 +23,27 @@ that researchers may want to use in the evaluation of univariable or multivariab
 The main task is downloading three files and making them communicate with each other. Thankfully, this is very easy. 
 
 You can follow these steps:
-1) Download the [generate_data.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), [set_params.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), and [basic_functions.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R) files into any folder, which we will refer to as `dir/`
-2) Start an R session in `dir/`
+1) Download the [generate_data.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), [set_params.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), and [basic_functions.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R) files into any folder
+2) Start an R session in this folder
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
 4) Run the command on line 35, which is `source('generate_data.R')`
-5) All done! Your global R environment will now contain the 10 new pieces of information
-    - `bx`: standardized associations of the IVs with the exposure(s)
+5) All done! Your global R environment will now contain the 9 new objects
+    - `bx`: standardized estimates of association between the IVs and the exposure(s)
     - `bxse`: standardized standard errors corresponding to `bx`
-    - `by`: standardized associations with the outcome
+    - `by`: standardized estimates of association between the IVs and the outcome
     - `byse`: standardized standard errors correspondings to `by`
-    - `bx`, `bxse`, `by` and `byse` are each now in the global environment
-    - `mStart`: the number of causal variants you specified
-    - 'mSelected`: the number of instruments passing the screening for assumption (i) relevance
-    - `mNotPruned`: the \[final\] number of instruments not pruned away for high LD
+    - `mStart`: the number of causal variants you specified for the exposure(s)
+    - `mSelected`: the number of instruments passing the screening for assumption (i) relevance
+    - `mNotPruned`: the number of instruments not pruned away because of high LD (also the size of the final IV set)
     - `LDMatrix`: the LD matrix for the final set of IVs
-    - `RhoME`: a $(p+1)\times(p+1)$ matrix of correlations between measurement errors in GWAS estimates for the outcome (top-left in `RhoME`) and exposure(s)
-        - Some multivariable MR methods such as [MVMR-cML](https://doi.org/10.1016/j.ajhg.2023.02.014) and [MRBEE](https://doi.org/10.1101/2023.01.10.523480) use this matrix to correct for bias from measurement error/weak instruments
+    - `RhoME`: a $(p+1)\times(p+1)$ matrix of correlations between errors in GWAS estimates for the outcome and $p$ exposure(s)
+        - Some multivariable MR methods such as [MVMR-cML](https://doi.org/10.1016/j.ajhg.2023.02.014) and [MRBEE](https://doi.org/10.1101/2023.01.10.523480) use this matrix to correct for bias from weak instruments
 
 # Can I add ____ to the simulation?
-**YES**. We want this work to be a collaborative effort involving the broader community of MR researchers. Please, if you feel any simulation code contains errors or could be improved in any way, **please initiate a [pull request](https://github.com/noahlorinczcomi/simmr/pulls) and directly modify the code yourself**. 
+**YES**
+
+We want this work to be a collaborative effort involving the broader community of MR researchers. Please, if you feel any simulation code contains errors or could be improved in any way, **please initiate a [pull request](https://github.com/noahlorinczcomi/simmr/pulls) and directly modify the code yourself**. 
 
 If you have questions, please contact me: noahlorinczcomi@gmail.com or njl96@case.edu
 
