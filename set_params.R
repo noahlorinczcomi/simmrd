@@ -16,10 +16,10 @@ variance_in_Y_explained_by_Xs=0.5 # scalar or vector
 ### Set of SNPs Causal for Exposure(s) 
 number_of_causal_SNPs=100 # scalar
 variance_in_Xs_explained_by_all_causal_SNPs=0.15 # scalar or vector
-number_of_weak_causal_SNPs=0 # scalar (weak for all exposures if there's more than 1)
-variance_in_Xs_explained_by_weak_causal_SNPs=0.01 # scalar or vector
-number_of_UHP_causal_SNPs=0 # scalar
-number_of_CHP_causal_SNPs=50 # scalar
+number_of_weak_causal_SNPs=10 # scalar (weak for all exposures if there's more than 1)
+variance_in_Xs_explained_by_weak_causal_SNPs=0.001 # scalar or vector
+number_of_UHP_causal_SNPs=10 # scalar
+number_of_CHP_causal_SNPs=10 # scalar
 variance_in_Y_explained_by_UHP_causal_SNPs=0.05 # scalar
 variance_in_Y_explained_by_CHP_causal_SNPs=0.15 # scalar
 variance_in_U_explained_by_CHP_causal_SNPs=0.15 # scalar
