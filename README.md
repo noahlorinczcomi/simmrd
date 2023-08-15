@@ -28,7 +28,7 @@ You can follow these steps:
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
 4) Run the command on line 35, which is `source('generate_data.R')`
-5) All done! Your global R environment will now contain the 9 new objects
+5) All done! Your global R environment will now contain the 10 new objects
     - `bx`: standardized estimates of association between the IVs and the exposure(s)
     - `bxse`: standardized standard errors corresponding to `bx`
     - `by`: standardized estimates of association between the IVs and the outcome
@@ -39,6 +39,7 @@ You can follow these steps:
     - `LDMatrix`: the LD matrix for the final set of IVs
     - `RhoME`: a $(p+1)\times(p+1)$ matrix of correlations between errors in GWAS estimates for the outcome and $p$ exposure(s)
         - Some multivariable MR methods such as [MVMR-cML](https://doi.org/10.1016/j.ajhg.2023.02.014) and [MRBEE](https://doi.org/10.1101/2023.01.10.523480) use this matrix to correct for bias from weak instruments
+    - `theta`: $p$-length vector of true causal effects 
 
 # Can I add ____ to the simulation?
 **YES**
