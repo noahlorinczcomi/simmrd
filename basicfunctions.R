@@ -52,3 +52,18 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type,outcome_type
   return(list(bx=bx,bxse=bxse,by=by,byse=byse))
 }
 `%!in%`=Negate(`%in%`)
+pruning=function(jointPs,R,r2) {
+  n=nrow(R);
+  ps=cbind(1:n,jointPs); ps=ps[order(ps[,2]),]
+  ord=ps[,1]; ps=ps[,2]
+  R0=R[ord,ord]; R0[lower.tri(R0,diag=TRUE)]=0
+  drop=c()
+  for(i in 1:n) {
+    if(i %in% drop) next
+    vR=R0[i,]
+    w=which((vR)^2>r2)
+    if(length(w)==0) next else drop=c(drop,w)
+  }
+  if(sum(drop)>0) keep=c(1:n)[-ord[unique(drop)]] else keep=1:n
+  return(keep)
+}
