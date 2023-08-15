@@ -10,11 +10,13 @@ G=apply(G,2,std)
 # order will go UHP, CHP, valid, weak
 ### CHP IVs
 gammaC=rep(0,number_of_causal_SNPs)
-chpix=1:number_of_CHP_causal_SNPs
 if(number_of_CHP_causal_SNPs>0) {
+  chpix=1:number_of_CHP_causal_SNPs
   gammaC_=runif(number_of_CHP_causal_SNPs,1,5);
   adj=variance_in_U_explained_by_CHP_causal_SNPs/sum(gammaC_^2)
   gammaC_=sqrt(adj)*gammaC_; gammaC[chpix]=-gammaC_
+} else {
+  chpix=c()
 }
 ### setting U
 eU=rnorm(nall,0,sqrt(1-variance_in_U_explained_by_CHP_causal_SNPs))
@@ -29,6 +31,7 @@ B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
 # need to consider some IVs as weak at this stage
 # first k will be strong, remaining m-k will not be
 # heritability will be partitioned accordingly
+if(number_of_weak_causal_SNPs==0) variance_in_Xs_explained_by_weak_causal_SNPs=0
 strongix=1:(number_of_causal_SNPs-number_of_weak_causal_SNPs)
 strongh2=variance_in_Xs_explained_by_all_causal_SNPs-variance_in_Xs_explained_by_weak_causal_SNPs
 weakh2=variance_in_Xs_explained_by_all_causal_SNPs-strongh2
@@ -52,9 +55,15 @@ adj=vXY/sum(theta^2)
 theta=sqrt(adj)*theta
 piy=-sign(theta[1])*sqrt(variance_in_Y_explained_by_U)
 gammaU=rep(0,number_of_causal_SNPs)
-uhpix=(max(chpix)+c(1:number_of_UHP_causal_SNPs))
+if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
+  uhpix=(max(chpix)+c(1:number_of_UHP_causal_SNPs))
+} else if(number_of_UHP_causal_SNPs>0 & length(chpix)==0){
+  uhpix=1:number_of_UHP_causal_SNPs
+} else {
+  uhpix=c()
+}
 if(number_of_UHP_causal_SNPs>0) {
-  gammaU_=runif(number_of_CHP_causal_SNPs,-1,1);
+  gammaU_=runif(number_of_UHP_causal_SNPs,-1,1);
   adj=variance_in_Y_explained_by_UHP_causal_SNPs/sum(gammaU_^2)
   gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
 }
@@ -78,9 +87,9 @@ for(j in 1:ncol(bx)) {
   bxse[,j]=fit$std
 }
 ### uncomment if you want to see lots
-par(mfrow=c(1,2))
-pfun(B%*%theta,B%*%theta+piy*gammaC+gammaU,chpix,uhpix,xlab='bx*theta',ylab='by')
-pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
+# par(mfrow=c(1,2))
+# pfun(B%*%theta,B%*%theta+piy*gammaC+gammaU,chpix,uhpix,xlab='bx*theta',ylab='by')
+# pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
 ### standardize?
 data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,
               sample_size_Y,MR_standardization_type,outcome_type,exposure_types)
@@ -105,5 +114,7 @@ LD=LD[ix,ix]
 ### return data
 el=ls()
 # keep original objects plus the important ones I made
-ko=c(sl,'bx','bxse','by','byse','mStart','mSelected','mNotPruned','RhoME','LD') 
+nn=c('Outcome',paste0('Exposure',1:p))
+rownames(RhoME)=colnames(RhoME)=nn
+ko=c(sl,'bx','bxse','by','byse','mStart','mSelected','mNotPruned','RhoME','LD','theta') 
 rm(list=el[el %!in% ko])

@@ -11,15 +11,15 @@ phenotypic_correlation_Xs='ar1(0.2)' # scalar or string (string examples: 'toepl
 genetic_correlation_Xs='ar1(0.15)' # scalar or string (string examples: 'toeplitz','ar1(0.5)')
 ### Variances Explained in Exposure(s) (Xs), Confounder (U), and Outcome (U)
 variance_in_Xs_explained_by_U=0.1 # scalar or vector
-variance_in_Y_explained_by_U=0.1 # scalar
+variance_in_Y_explained_by_U=0.25 # scalar
 variance_in_Y_explained_by_Xs=0.5 # scalar or vector
 ### Set of SNPs Causal for Exposure(s) 
-number_of_causal_SNPs=50 # scalar
+number_of_causal_SNPs=100 # scalar
 variance_in_Xs_explained_by_all_causal_SNPs=0.15 # scalar or vector
-number_of_weak_causal_SNPs=5 # scalar (weak for all exposures if there's more than 1)
+number_of_weak_causal_SNPs=0 # scalar (weak for all exposures if there's more than 1)
 variance_in_Xs_explained_by_weak_causal_SNPs=0.01 # scalar or vector
-number_of_UHP_causal_SNPs=5 # scalar
-number_of_CHP_causal_SNPs=5 # scalar
+number_of_UHP_causal_SNPs=0 # scalar
+number_of_CHP_causal_SNPs=50 # scalar
 variance_in_Y_explained_by_UHP_causal_SNPs=0.05 # scalar
 variance_in_Y_explained_by_CHP_causal_SNPs=0.15 # scalar
 variance_in_U_explained_by_CHP_causal_SNPs=0.15 # scalar
@@ -45,4 +45,5 @@ source('generate_data.R')
 # `mNotPruned`: the [final] number of instruments not pruned away for high LD 
 # `LDMatrix`: the LD matrix for the final set of IVs
 # `RhoME`: a (p+1)x(p+1) matrix of correlations between measurement errors
+# `theta`: vector of true causal effects
 ################################################################################
