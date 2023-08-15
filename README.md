@@ -24,7 +24,7 @@ The main task is downloading three files and making them communicate with each o
 
 You can follow these steps:
 1) Download the [generate_data.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), [set_params.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), and [basic_functions.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R) files into any folder
-2) Start an R session in this folder
+2) Start an R session and make this folder your working directory
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
 4) Run the command on line 35, which is `source('generate_data.R')`
