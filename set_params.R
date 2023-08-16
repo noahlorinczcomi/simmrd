@@ -4,7 +4,8 @@ library(mvnfast)
 ### Exposure(s) (Xs) and Outcome (Y) GWAS
 sample_size_Xs=2e4 # scalar
 sample_size_Y=2e4 # scalar
-proportion_overlapping_in_Xs_and_Y_GWAS=0.1 # scalar
+prop_gwas_overlap_Xs_and_Y=0.1 # scalar
+# prop_gwas_overlap_Xs=1 # fixed in current version
 ### Phenotypic and Genetic Correlations between Exposure(s) (Xs) and Outcome (Y)
 number_of_exposures=3 # scalar
 phenotypic_correlation_Xs='ar1(0.2)' # scalar or string (string examples: 'toeplitz','ar1(0.5)')

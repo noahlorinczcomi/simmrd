@@ -1,6 +1,6 @@
 source('basicfunctions.R')
 sl=ls()
-n0_xy=floor(proportion_overlapping_in_Xs_and_Y_GWAS*min(c(sample_size_Y,sample_size_Xs)))
+n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
 nall=sample_size_Y+sample_size_Xs-n0_xy
 indY=1:sample_size_Y
 indX=(nall-sample_size_Xs+1):nall
