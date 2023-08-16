@@ -67,10 +67,8 @@ if(number_of_UHP_causal_SNPs>0) {
   adj=variance_in_Y_explained_by_UHP_causal_SNPs/sum(gammaU_^2)
   gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
 }
-# INSIDE ASSUMPTION ... ?
 vUHPY=variance_in_Y_explained_by_UHP_causal_SNPs
-vCHPY=variance_in_Y_explained_by_CHP_causal_SNPs
-eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-vCHPY))
+eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
 Y=X%*%theta+piy*U+G%*%gammaU+eY
 RhoXY=cor(cbind(Y,X))
 p=ncol(B);nY=length(indY); nX=sample_size_Xs

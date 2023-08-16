@@ -21,7 +21,6 @@ variance_in_Xs_explained_by_weak_causal_SNPs=0.001 # scalar or vector
 number_of_UHP_causal_SNPs=0 # scalar
 number_of_CHP_causal_SNPs=0 # scalar
 variance_in_Y_explained_by_UHP_causal_SNPs=0.05 # scalar
-variance_in_Y_explained_by_CHP_causal_SNPs=0.15 # scalar
 variance_in_U_explained_by_CHP_causal_SNPs=0.15 # scalar
 mafs_of_causal_SNPs=0.3 # scalar
 LD_causal_SNPs='ar(0.5)' # scalar or string (string examples: 'toeplitz','ar1(0.5)', or 'I')
