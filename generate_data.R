@@ -33,6 +33,7 @@ B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
 # heritability will be partitioned accordingly
 if(number_of_weak_causal_SNPs==0) variance_in_Xs_explained_by_weak_causal_SNPs=0
 strongix=1:(number_of_causal_SNPs-number_of_weak_causal_SNPs)
+ix=1:number_of_causal_SNPs; weakix=ix[ix %!in% strongix]
 strongh2=variance_in_Xs_explained_by_all_causal_SNPs-variance_in_Xs_explained_by_weak_causal_SNPs
 weakh2=variance_in_Xs_explained_by_all_causal_SNPs-strongh2
 strongadj=strongh2/colSums(B[strongix,]^2)
@@ -102,6 +103,8 @@ for(j in 1:m) {
   pj=1-pchisq(v,p); pjs[j]=pj
   if(pj<instrument_selection_Pvalue_threshold) keep=c(keep,j)
 }
+# add weak IVs if user wanted them
+if(number_of_weak_causal_SNPs>0) keep=c(keep, weakix)
 if(length(keep)==0) stop(cat('ERROR: The IV selection P-value threshold does not keep any SNPs. \n This can happen if you simulated a very large number of causal \n SNPs because it implies they each have a very small contribution to heritability'))
 mSelected=length(keep)
 ### any pruning?
