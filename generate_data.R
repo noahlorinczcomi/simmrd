@@ -12,7 +12,7 @@ G=apply(G,2,std)
 gammaC=rep(0,number_of_causal_SNPs)
 if(number_of_CHP_causal_SNPs>0) {
   chpix=1:number_of_CHP_causal_SNPs
-  gammaC_=runif(number_of_CHP_causal_SNPs,1,5);
+  gammaC_=runif(number_of_CHP_causal_SNPs,-1/2,1/2);
   adj=variance_in_U_explained_by_CHP_causal_SNPs/sum(gammaC_^2)
   gammaC_=sqrt(adj)*gammaC_; gammaC[chpix]=-gammaC_
 } else {
@@ -40,7 +40,7 @@ strongadj=strongh2/colSums(B[strongix,]^2)
 weakadj=weakh2/colSums(B[-strongix,]^2)
 for(j in 1:ncol(B)) {
   B[strongix,j]=sqrt(strongadj[j])*B[strongix,j]
-  B[-strongix,j]=sqrt(weakadj[j])*B[-strongix,j]
+  B[weakix,j]=sqrt(weakadj[j])*B[weakix,j]
 }
 # effect of confounder
 pix=sqrt(variance_in_Xs_explained_by_U)
@@ -113,9 +113,11 @@ ix=keep[ix]
 mNotPruned=length(ix)
 LD=LD[ix,ix]
 ### return data
+bx=bx[ix,];by=by[ix];bxse=bxse[ix,];byse=byse[ix]
+IVtype=classIVs(ix,uhpix,chpix,weakix)
 el=ls()
 # keep original objects plus the important ones I made
 nn=c('Outcome',paste0('Exposure',1:p))
 rownames(RhoME)=colnames(RhoME)=nn
-ko=c(sl,'bx','bxse','by','byse','mStart','mSelected','mNotPruned','RhoME','LD','theta') 
+ko=c(sl,'bx','bxse','by','byse','mStart','mSelected','mNotPruned','RhoME','LD','theta','IVtype') 
 rm(list=el[el %!in% ko])

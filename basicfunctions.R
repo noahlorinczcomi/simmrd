@@ -67,3 +67,10 @@ pruning=function(jointPs,R,r2) {
   if(sum(drop)>0) keep=c(1:n)[-ord[unique(drop)]] else keep=1:n
   return(keep)
 }
+classIVs=function(ix,uhpix,chpix,weakix) {
+  keys=c('UHP','CHP','weak')
+  ll=list(uhpix,chpix,weakix)
+  boo=sapply(1:3,function(h) ix %in% ll[[h]])
+  cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
+  return(cl)
+}

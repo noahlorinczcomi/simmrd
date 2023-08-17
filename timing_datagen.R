@@ -7,7 +7,7 @@ for(i in 1:length(ms)) {
   for(k in 1:length(ns)) {
     sample_size_Xs=sample_size_Y=ns[k]
     number_of_causal_SNPs=ms[i]
-    proportion_overlapping_in_Xs_and_Y_GWAS=0.1 # scalar
+    proportion_overlapping_in_Xs_and_Y_GWAS=1 # scalar
     ### Phenotypic and Genetic Correlations between Exposure(s) (Xs) and Outcome (Y)
     number_of_exposures=3 # scalar
     phenotypic_correlation_Xs='ar1(0.2)' # scalar or string (string examples: 'toeplitz','ar1(0.5)')
