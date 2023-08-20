@@ -34,12 +34,14 @@ You can follow these steps:
     - `by`: standardized estimates of association between the IVs and the outcome
     - `byse`: standardized standard errors correspondings to `by`
     - `mStart`: the number of causal variants you specified for the exposure(s)
-    - `mSelected`: the number of instruments passing the screening for assumption (i) relevance
-    - `mNotPruned`: the number of instruments not pruned away because of high LD (also the size of the final IV set)
+    - `mIVs`: the final number of instruments returned
     - `LDMatrix`: the LD matrix for the final set of IVs
     - `RhoME`: a $(p+1)\times(p+1)$ matrix of correlations between errors in GWAS estimates for the outcome and $p$ exposure(s)
         - Some multivariable MR methods such as [MVMR-cML](https://doi.org/10.1016/j.ajhg.2023.02.014) and [MRBEE](https://doi.org/10.1101/2023.01.10.523480) use this matrix to correct for bias from weak instruments
-    - `theta`: $p$-length vector of true causal effects 
+    - `theta`: $p$-length vector of true causal effects
+    - `IVtype`: Classification for each IV in data generation: UHP, CHP, Valid. Does not consider weakness!
+    - `bxunstd`: unstandardized estimates of association between the final IVs and the exposures 
+    - `bxseunstd`: unstandardized standard errors corresponding to `bxunstd`
 
 # Can I add ____ to the simulation?
 **YES**
