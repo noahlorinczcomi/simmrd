@@ -67,10 +67,31 @@ pruning=function(jointPs,R,r2) {
   if(sum(drop)>0) keep=c(1:n)[-ord[unique(drop)]] else keep=1:n
   return(keep)
 }
-classIVs=function(ix,uhpix,chpix,weakix) {
-  keys=c('UHP','CHP','weak')
-  ll=list(uhpix,chpix,weakix)
-  boo=sapply(1:3,function(h) ix %in% ll[[h]])
+classIVs=function(ix,uhpix,chpix) {
+  keys=c('UHP','CHP')
+  ll=list(uhpix,chpix)
+  boo=sapply(1:2,function(h) ix %in% ll[[h]])
+  boo=matrix(boo,nr=length(ix))
   cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
   return(cl)
 }
+setf=function(bxunstd,nX,fix_Fstatistic_at) {
+  # currently agnostic to LD structure
+  m=nrow(B);p=ncol(bxunstd)
+  v=diag(bxunstd%*%t(bxunstd)); 
+  ord=cbind(1:m,v);
+  ord=ord[order(v,decreasing=FALSE),]
+  #bxunstd=bxunstd[ord[,1],]
+  h2s=a=b=c(); 
+  for(i in 1:m) {
+    ixi=ord[1:i,1]
+    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,nc=p)))
+    a[i]=(nX-i-1)/i
+    b[i]=h2s[i]/(1-h2s[i])
+  }
+  fs=a*b
+  wf=which.min(abs(fs-fix_Fstatistic_at))
+  ix=ord[1:wf,1]
+  return(list(ix=ix,fs=fs))
+}
+
