@@ -27,8 +27,15 @@ GenCorrXX=parthcorr(genetic_correlation_Xs,n=number_of_exposures)
 LD=parthcorr(LD_causal_SNPs,number_of_causal_SNPs)
 K=kronecker(GenCorrXX,LD)
 Thsq=chol(solve(LD))
-B=rmvn(1,rep(5,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
+B=rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
 B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+th=chol(solve(GenCorrXX))
+cop=pnorm(B%*%th)
+#cor(cop)
+cop=cop%*%chol(GenCorrXX)
+list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+
+
 # rescale to match heritability
 adj=Xs_variance_explained_by_g/colSums(B^2)
 for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
