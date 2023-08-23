@@ -1,7 +1,8 @@
 # Summary
 The scripts in this repository can be used to generate summary statistics to use in Mendelian Randomization simulations
 
-There are many different statistical methods available to perform Mendelian Randomization (MR). When these methods are introduced in the literature, simulations are performed to evaluate their performance. There is currently no standard for performing these simulations, hence some methods perform well under some settings but poorly under others.
+There are many different statistical methods available to perform Mendelian Randomization (MR). When these methods are introduced in the literature, simulations are performed to evaluate their performance. There is currently no standard for performing these simulations, hence some methods perform differently in separate simulations intended to mirror the same reality (eg [ref](https://doi.org/10.1101/2021.03.26.437168) and [ref](https://doi.org/10.1214/20-AOS2027
+), [ref](https://doi.org/10.1016/j.ajhg.2023.02.014) and [ref](https://doi.org/10.1002/gepi.22295), [ref](https://doi.org/10.1093/ije/dyaa262) and [ref](https://doi.org/10.1016/j.ajhg.2021.05.014)).
 
 The code in this repo is open source, meaning **you** can modify it by initiating a [pull request](https://github.com/noahlorinczcomi/simmr/pulls). We encourage you to make changes to our code with the intention that the community will eventually settle on an accepted standard for how simulations in MR should be performed.
 
@@ -20,10 +21,10 @@ This software generates GWAS summary statistics under different scenarios of
 that researchers may want to use in the evaluation of univariable or multivariable Mendelian Randomization methods.
 
 # How do I use it?
-The main task is downloading three files and making them communicate with each other. Thankfully, this is very easy. 
+The main task is downloading three files and making them communicate with each other, which is very easy. 
 
 You can follow these steps:
-1) Download the [generate_data.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), [set_params.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), and [basic_functions.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R) files into any folder
+1) Download the (generate_data.R)[https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R], [set_params.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R), and [basic_functions.R](https://github.com/noahlorinczcomi/simmr/blob/main/generate_data.R) files into any folder
 2) Start an R session and make this folder your working directory
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
