@@ -28,7 +28,7 @@ You can follow these steps:
 2) Start an R session and make this folder your working directory
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
-4) Run the command on line 35, which is `source('generate_data.R')`
+4) Run the command on line 33, which is `source('generate_data.R')`
 5) All done! Your global R environment will now contain the 10 new objects
     - `bx`: standardized estimates of association between the IVs and the exposure(s)
     - `bxse`: standardized standard errors corresponding to `bx`
