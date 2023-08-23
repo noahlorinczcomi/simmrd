@@ -25,8 +25,6 @@ mafs_of_causal_SNPs=0.3 # scalar
 LD_causal_SNPs='ar(0.5)' # scalar or string (string examples: 'toeplitz','ar1(0.5)', or 'I')
 ### Standardizing MR data
 MR_standardization_type='none' # Qi & Chatterjee MRMix paper, or could be 'z' (Z-score) or 'none'
-outcome_type='binary' # or anything else, eg 'wQ#4tB @# TQ' will be interpreted as 'continuous'
-exposure_types='binary' # or anything else
 ### Performing IV selection
 simtype='weak' # or winners
 IV_Pvalue_threshold=5e-5 # in a joint test of H0: beta_j1=betaj2=...=betaj3=0 when there are multiple exposures

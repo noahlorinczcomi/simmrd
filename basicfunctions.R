@@ -32,23 +32,13 @@ pfun=function(x,y,chpix,uhpix,...) {
   if(!lc & lu) legend('bottomright','UHP',pch=16,col='indianred')
   if(lc & lu) legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
 }
-parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type,outcome_type,exposure_types) {
+parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
   if(mst=='none') return(list(bx=bx,bxse=bxse,by=by,byse=byse))
   if(mst=='z') return(list(bx=bx/bxse,bxse=bx/bx,by=by/byse,byse=by/by))
-  # will then do qi & chatterjee
-  if(outcome_type=='binary') {
-    by=by*sqrt(2*maf*(1-maf))
-    byse=byse*sqrt(2*maf*(1-maf))
-  } else {
-    by=by/byse/sqrt(ny); byse=1/sqrt(ny)
-  }
-  if(exposure_types=='binary') {
-    bx=bx*sqrt(2*maf*(1-maf))
-    bbxse=bxse*sqrt(2*maf*(1-maf))
-  } else {
-    bx=bx/bxse/sqrt(nx); bxse=1/sqrt(nx)
-  }
+  # will then do qi & chatterjee if top two didn't return
+  by=by/byse/sqrt(ny); byse=1/sqrt(ny)
+  bx=bx/bxse/sqrt(nx); bxse=1/sqrt(nx)
   return(list(bx=bx,bxse=bxse,by=by,byse=byse))
 }
 `%!in%`=Negate(`%in%`)

@@ -89,8 +89,7 @@ for(j in 1:ncol(bx)) {
 # pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
 ### standardize?
 bxunstd=bx; bxseunstd=bxse
-data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,
-              sample_size_Y,MR_standardization_type,outcome_type,exposure_types)
+data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,sample_size_Y,MR_standardization_type)
 bx=data$bx;bxse=data$bxse;by=data$by;byse=data$byse; m=nrow(bx)
 ### instrument selection based on P-value
 ######
