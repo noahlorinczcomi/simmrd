@@ -1,5 +1,5 @@
 # Summary
-The scripts in this repository can be used to generate summary statistics to use in Mendelian Randomization simulations
+The R scripts in this repository can be used to generate summary statistics to use in Mendelian Randomization simulations
 
 There are many different statistical methods available to perform Mendelian Randomization (MR). When these methods are introduced in the literature, simulations are performed to evaluate their performance. There is currently no standard for performing these simulations, hence some methods perform differently in separate simulations intended to mirror the same reality (eg [ref](https://doi.org/10.1101/2021.03.26.437168) and [ref](https://doi.org/10.1214/20-AOS2027
 ), [ref](https://doi.org/10.1016/j.ajhg.2023.02.014) and [ref](https://doi.org/10.1002/gepi.22295), [ref](https://doi.org/10.1093/ije/dyaa262) and [ref](https://doi.org/10.1016/j.ajhg.2021.05.014)).
