@@ -6,6 +6,8 @@ There are many different statistical methods available to perform Mendelian Rand
 
 The code in this repo is open source, meaning **you** can modify it by initiating a [pull request](https://github.com/noahlorinczcomi/simmr/pulls). We encourage you to make changes to our code with the intention that the community will eventually settle on an accepted standard for how simulations in MR should be performed.
 
+![](https://github.com/noahlorinczcomi/simmr/blob/main/simmr_flowchart.svg)
+
 # Who is this for?
 This software is primarily for researchers evaluating the performance of their new or existing MR estimator. This software can also be used by reviewers and others to validate the performance of pre-published manuscripts reporting MR simulations using GWAS summary statistics.
 
