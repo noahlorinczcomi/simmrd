@@ -34,8 +34,6 @@ cop=pnorm(B%*%th)
 #cor(cop)
 cop=cop%*%chol(GenCorrXX)
 list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
-
-
 # rescale to match heritability
 adj=Xs_variance_explained_by_g/colSums(B^2)
 for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -49,9 +47,10 @@ X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
 ### model for Y
 vXY=Y_variance_explained_by_Xs
 theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
+theta=theta*signs_of_causal_effects
 adj=vXY/sum(theta^2)
 theta=sqrt(adj)*theta
-piy=-sign(theta[1])*sqrt(Y_variance_explained_by_U)
+piy=-1*sqrt(Y_variance_explained_by_U) # always negative
 gammaU=rep(0,number_of_causal_SNPs)
 if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
   uhpix=(max(chpix)+c(1:number_of_UHP_causal_SNPs))
@@ -83,7 +82,7 @@ for(j in 1:ncol(bx)) {
   bx[,j]=fit$est
   bxse[,j]=fit$std
 }
-### uncomment if you want to see lots
+### uncomment if you want to see plots
 # par(mfrow=c(1,2))
 # pfun(B%*%theta,B%*%theta+piy*gammaC+gammaU,chpix,uhpix,xlab='bx*theta',ylab='by')
 # pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
@@ -98,12 +97,19 @@ st=tolower(substr(simtype,start=1,stop=3))
 if(st=='win') {
   keep=pjs=c()
   Ruu=RhoME[-1,-1] # take off outcome-relevant term
-  for(j in 1:m) {
-    Th=diag(bxse[j,])%*%Ruu%*%diag(bxse[j,])
-    Th=solve(Th)
-    v=t(bx[j,])%*%Th%*%bx[j,]
-    pj=1-pchisq(v,p); pjs[j]=pj
-    if(pj<IV_Pvalue_threshold) keep=c(keep,j)
+  # if user wants to use joint testing for IV selection
+  if(grepl('joint',tolower(MVMR_IV_selection_type),fixed=TRUE)) {
+    for(j in 1:m) {
+      Th=diag(bxse[j,])%*%Ruu%*%diag(bxse[j,])
+      Th=solve(Th)
+      v=t(bx[j,])%*%Th%*%bx[j,]
+      pj=1-pchisq(v,p); pjs[j]=pj
+      if(pj<IV_Pvalue_threshold) keep=c(keep,j)
+    }
+    # if user wants the union set of significant SNPs as IVs in MVMR
+  } else {
+    z=bx/bxse
+    keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
   }
   ix=pruning(pjs[keep],LD[keep,keep],LD_pruning_r2)
   ix=keep[ix]

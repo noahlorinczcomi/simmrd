@@ -12,7 +12,8 @@ phenotypic_correlation_Xs='ar1(0.2)' # scalar or string (string examples: 'toepl
 genetic_correlation_Xs='ar1(0.15)' # scalar or string (string examples: 'toeplitz','ar1(0.5)')
 ### Variances Explained in Exposure(s) (Xs), Confounder (U), and Outcome (U)
 Xs_variance_explained_by_U=0.10 # scalar
-Y_variance_explained_by_Xs=0.50 # scalar
+Y_variance_explained_by_Xs=c(0.5,0.1,0) # scalar (applied to all exposures) or p-length vector
+signs_of_causal_effects=c(1,-1,1) # scalar (applied to all exposures) or p-length vector of mixed 1's and -1's
 Y_variance_explained_by_U=0.25 # scalar
 ### Set of SNPs Causal for Exposure(s) 
 number_of_causal_SNPs=100 # scalar
@@ -27,7 +28,8 @@ LD_causal_SNPs='ar(0.5)' # scalar or string (string examples: 'toeplitz','ar1(0.
 MR_standardization_type='none' # Qi & Chatterjee MRMix paper, or could be 'z' (Z-score) or 'none'
 ### Performing IV selection
 simtype='weak' # or winners
-IV_Pvalue_threshold=5e-5 # in a joint test of H0: beta_j1=betaj2=...=betaj3=0 when there are multiple exposures
+MVMR_IV_selection_type='joint' # either 'joint' (choose IVs significant in a p-degree of freedom joint test) or 'union' (union set of univariate association tests). Ignore if performing UVMR
+IV_Pvalue_threshold=5e-5 # only SNPs with P<this threshold using your choice of MVMR_IV_selection_type test will be considered as IVs
 LD_pruning_r2=0.1 # upper boundary of squared LD correlation
 fix_Fstatistic_at=30 # average across exposures, not conditional F-statistics
 source('generate_data.R')

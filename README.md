@@ -30,7 +30,7 @@ You can follow these steps:
 2) Start an R session and make this folder your working directory
 3) Open the `set_params.R` file and change the parameter settings however you'd like
     - There are descriptions of what each parameter represents within the file itself
-4) Run the command on line 33, which is `source('generate_data.R')`
+4) Run the command on line 35, which is `source('generate_data.R')`
 5) All done! Your global R environment will now contain the 10 new objects
     - `bx`: standardized estimates of association between the IVs and the exposure(s)
     - `bxse`: standardized standard errors corresponding to `bx`
@@ -46,6 +46,8 @@ You can follow these steps:
     - `bxunstd`: unstandardized estimates of association between the final IVs and the exposures 
     - `bxseunstd`: unstandardized standard errors corresponding to `bxunstd`
 
+There are at least three ways to generate the simulated data you want, which are described in sections [Method 1](#method-1:-everything-in-one-environment), [Method 2](#Method-2:-Sourcing-the-`set_params.R`-file), or [Method 3](#Method-3:-Sourcing-multiple-`set_params.R`-files-for-different-simulations).
+
 # Can I add ____ to the simulation?
 **YES**
 
@@ -53,8 +55,10 @@ We want this work to be a collaborative effort involving the broader community o
 
 If you have questions, please contact me: noahlorinczcomi@gmail.com or njl96@case.edu
 
-# Short tutorial
-Assume we have downloaded the `set_params.R`, `generate_data.R`, and `basicfunctions.R` files into the `dir/` folder on your computer. Begin and R session and open the `set_params.R` file in (eg) Rstudio. You should see something like this:
+# Tutorial
+Assume we have downloaded the `set_params.R`, `generate_data.R`, and `basicfunctions.R` files into the `dir/` folder on your computer. 
+## Method 1: Everything in one environment
+Begin and R session and open the `set_params.R` file in (eg) Rstudio. You should see something like this:
 ```R
 rm(list=ls(all=TRUE))
 library(mvnfast)
@@ -70,9 +74,10 @@ phenotypic_correlation_Xs='ar1(0.2)' # scalar or string (string examples: 'toepl
 genetic_correlation_Xs='ar1(0.15)' # scalar or string (string examples: 'toeplitz','ar1(0.5)')
 ### Variances Explained in Exposure(s) (Xs), Confounder (U), and Outcome (U)
 Xs_variance_explained_by_U=0.10 # scalar
-Y_variance_explained_by_Xs=0.50 # scalar
+Y_variance_explained_by_Xs=c(0.5,0.1,0) # scalar (applied to all exposures) or p-length vector
+signs_of_causal_effects=c(1,-1,1) # scalar (applied to all exposures) or p-length vector of mixed 1's and -1's
 Y_variance_explained_by_U=0.25 # scalar
-### Set of SNPs Causal for Exposure(s)
+### Set of SNPs Causal for Exposure(s) 
 number_of_causal_SNPs=100 # scalar
 Xs_variance_explained_by_g=0.15 # scalar
 number_of_UHP_causal_SNPs=10 # scalar
@@ -85,7 +90,8 @@ LD_causal_SNPs='ar(0.5)' # scalar or string (string examples: 'toeplitz','ar1(0.
 MR_standardization_type='none' # Qi & Chatterjee MRMix paper, or could be 'z' (Z-score) or 'none'
 ### Performing IV selection
 simtype='weak' # or winners
-IV_Pvalue_threshold=5e-5 # in a joint test of H0: beta_j1=betaj2=...=betaj3=0 when there are multiple exposures
+MVMR_IV_selection_type='joint' # either 'joint' (choose IVs significant in a p-degree of freedom joint test) or 'union' (union set of univariate association tests). Ignore if performing UVMR
+IV_Pvalue_threshold=5e-5 # only SNPs with P<this threshold using your choice of MVMR_IV_selection_type test will be considered as IVs
 LD_pruning_r2=0.1 # upper boundary of squared LD correlation
 fix_Fstatistic_at=30 # average across exposures, not conditional F-statistics
 source('generate_data.R')
@@ -102,7 +108,7 @@ source('generate_data.R')
 # `RhoME`: a (p+1)x(p+1) matrix of correlations between measurement errors
 # `theta`: vector of true causal effects
 # `IVtype`: Classification for each IV in data generation: UHP, CHP, Valid. Does not consider weakness!
-# `bxunstd`: unstandardized estimates of association between the final IVs and the exposures
+# `bxunstd`: unstandardized estimates of association between the final IVs and the exposures 
 # `bxseunstd`: unstandardized standard errors corresponding to `bxunstd`
 ################################################################################
 ```
@@ -123,6 +129,7 @@ for(iteration in 1:n_simulations) {
     # save results etc.
 }
 ```
+## Method 2: Sourcing the `set_params.R` file
 Or, you can save the `set_params.R` file with the parameters you want and perform simulations like this:
 ```R
 # begin session
@@ -137,6 +144,23 @@ for(iteration in 1:n_simulations) {
     # save results etc.
 }
 ```
+## Method 3: Sourcing multiple `set_params.R` files for different simulations
 
-
+Or you can save multiple parameter files to produce different settings (e.g., save `set_params_scenario1.R`, `set_params_scenario2.R`) and source them in a nested `for()` loop in R like this:
+```R
+# begin session
+library(MRBEE)
+scenarios=c('scenario1','scenario2')
+for(scenario in scenarios) { # 2 scenarios in this example
+    for(iteration in 1:n_simulations) {
+        fp=paste0('set_params_',scenario,'.R')
+        source(fp)
+        weights=1/byse^2
+        ivw=lm(by~bx-1,weights=weights)
+        pD=prepData(list(R=RhoME,Ncor=1e5,EstHarm=cbind(by,bx),SEHarm=cbind(byse,bxse)))
+        mrbee=MRBEE.IMRP(pD,FDR=TRUE)
+        # save results etc.
+    }
+}
+```
 
