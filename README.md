@@ -109,8 +109,9 @@ source('generate_data.R')
 
 Every time you run the `source(generate_data.R)` command, new simulation data will be generated. An example of how you use `simmr` to perform MVMR using IVW and MRBEE is this:
 ```R
-# set parameters here:
-# parram1=<> ; param2=<> ; etc. etc. etc.
+# begin session
+# set parameters:
+# param1=<> ; param2=<> ; etc. etc. etc.
 library(MRBEE)
 n_simulations=1000
 for(iteration in 1:n_simulations) {
@@ -122,7 +123,20 @@ for(iteration in 1:n_simulations) {
     # save results etc.
 }
 ```
-
+Or, you can save the `set_params.R` file with the parameters you want and perform simulations like this:
+```R
+# begin session
+library(MRBEE)
+n_simulations=1000
+for(iteration in 1:n_simulations) {
+    source('set_params.R')
+    weights=1/byse^2
+    ivw=lm(by~bx-1,weights=weights)
+    pD=prepData(list(R=RhoME,Ncor=1e5,EstHarm=cbind(by,bx),SEHarm=cbind(byse,bxse)))
+    mrbee=MRBEE.IMRP(pD,FDR=TRUE)
+    # save results etc.
+}
+```
 
 
 
