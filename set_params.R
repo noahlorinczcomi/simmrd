@@ -1,4 +1,4 @@
-rm(list=ls(all=TRUE))
+#rm(list=ls(all=TRUE))
 library(mvnfast)
 ################################################################################
 ### Exposure(s) (Xs) and Outcome (Y) GWAS
@@ -25,7 +25,7 @@ U_variance_explained_by_CHP=0.05 # scalar
 mafs_of_causal_SNPs=0.3 # scalar
 LD_causal_SNPs='ar(0.5)' # scalar or string (string examples: 'toeplitz','ar1(0.5)', or 'I')
 ### Standardizing MR data
-MR_standardization_type='none' # Qi & Chatterjee MRMix paper, or could be 'z' (Z-score) or 'none'
+MR_standardization='none' # could be 'z' (Z-score) or 'none'. Note that all genotypes and phenotypes are already standardized
 ### Performing IV selection
 simtype='weak' # or winners
 MVMR_IV_selection_type='joint' # either 'joint' (choose IVs significant in a p-degree of freedom joint test) or 'union' (union set of univariate association tests). Ignore if performing UVMR
@@ -40,12 +40,13 @@ source('generate_data.R')
 # `by`: standardized associations with the outcome
 # `byse`: standardized standard errors correspondings to `by`
 # `bx`, `bxse`, `by` and `byse` are each now in the global environment
-# `mStart`: the number of causal variants you specified
 # 'mIVs`: the final number of instruments returned
 # `LDMatrix`: the LD matrix for the final set of IVs
 # `RhoME`: a (p+1)x(p+1) matrix of correlations between measurement errors
 # `theta`: vector of true causal effects
 # `IVtype`: Classification for each IV in data generation: UHP, CHP, Valid. Does not consider weakness!
-# `bxunstd`: unstandardized estimates of association between the final IVs and the exposures 
-# `bxseunstd`: unstandardized standard errors corresponding to `bxunstd`
+# `bx_unstd`: unstandardized estimates of association between the final IVs and the exposures 
+# `bxse_unstd`: unstandardized standard errors corresponding to `bx_unstd`
+# `by_unstd`: unstandardized estimates of association between the final IVs and the outcome 
+# `byse_unstd`: unstandardized standard errors corresponding to `by_unstd`
 ################################################################################

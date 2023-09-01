@@ -87,7 +87,7 @@ for(j in 1:ncol(bx)) {
 # pfun(B%*%theta,B%*%theta+piy*gammaC+gammaU,chpix,uhpix,xlab='bx*theta',ylab='by')
 # pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
 ### standardize?
-bxunstd=bx; bxseunstd=bxse
+bx_unstd=bx; bxse_unstd=bxse; by_unstd=by; byse_unstd=byse
 data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,sample_size_Y,MR_standardization_type)
 bx=data$bx;bxse=data$bxse;by=data$by;byse=data$byse; m=nrow(bx)
 ### instrument selection based on P-value
@@ -115,7 +115,7 @@ if(st=='win') {
   ix=keep[ix]
   ### or pruning to achieve certain variance explained by IVs?
 } else if(st=='wea') {
-  ff=setf(bxunstd,nX,fix_Fstatistic_at)
+  ff=setf(bx_unstd,nX,fix_Fstatistic_at)
   ix=ff$ix
   fs=ff$fs
 } else {
@@ -125,17 +125,18 @@ if(st=='win') {
 mIVs=length(ix)
 LD=LD[ix,ix]
 bx=bx[ix,];by=by[ix];bxse=bxse[ix,];byse=byse[ix]
-bxunstd=bxunstd[ix,]; bxseunstd=bxseunstd[ix,]
+bx_unstd=bx_unstd[ix,]; bxse_unstd=bxse_unstd[ix,]
 IVtype=classIVs(ix,uhpix,chpix)
 el=ls()
 # vetify weak IV set
 # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
-# h2=colSums(bxunstd^2)
-# (meff=nrow(bxunstd))
+# h2=colSums(bx_unstd^2)
+# (meff=nrow(bx_unstd))
 # (nX-meff-1)/meff*h2/(1-h2)
 # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
 # keep original objects plus the important ones I made
 nn=c('Outcome',paste0('Exposure',1:p))
 rownames(RhoME)=colnames(RhoME)=nn
-ko=c(sl,'bx','bxse','by','byse','mStart','mIVs','RhoME','LD','theta','IVtype','bxunstd','bxseunstd') 
+ko=c(sl,'bx','bxse','by','byse','mIVs','RhoME','LD','theta','IVtype','bx_unstd',
+'bxse_unstd','by_unstd','byse_unstd') 
 rm(list=el[el %!in% ko])
