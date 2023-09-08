@@ -31,6 +31,7 @@ simtype='weak' # or winners
 MVMR_IV_selection_type='joint' # either 'joint' (choose IVs significant in a p-degree of freedom joint test) or 'union' (union set of univariate association tests). Ignore if performing UVMR
 IV_Pvalue_threshold=5e-5 # only SNPs with P<this threshold using your choice of MVMR_IV_selection_type test will be considered as IVs
 LD_pruning_r2=0.1 # upper boundary of squared LD correlation
+N_of_LD_ref=Inf # LD matrix in MR is same as true LD matrix. Otherwise put a size of the ref panel (eg `20000` to represent 20k individuals)
 fix_Fstatistic_at=30 # average across exposures, not conditional F-statistics
 source('generate_data.R')
 ################################################################################
