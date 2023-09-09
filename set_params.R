@@ -17,9 +17,9 @@ signs_of_causal_effects=c(1,-1,1) # scalar (applied to all exposures) or p-lengt
 Y_variance_explained_by_U=0.25 # scalar
 ### Set of SNPs Causal for Exposure(s) 
 number_of_causal_SNPs=100 # scalar
-Xs_variance_explained_by_g=0.15 # scalar
+Xs_variance_explained_by_g=0.10 # scalar
 number_of_UHP_causal_SNPs=10 # scalar
-number_of_CHP_causal_SNPs=10 # scalar
+number_of_CHP_causal_SNPs=30 # scalar
 Y_variance_explained_by_UHP=0.05 # scalar
 U_variance_explained_by_CHP=0.05 # scalar
 mafs_of_causal_SNPs=0.3 # scalar
@@ -34,6 +34,7 @@ LD_pruning_r2=0.1 # upper boundary of squared LD correlation
 N_of_LD_ref=Inf # LD matrix in MR is same as true LD matrix. Otherwise put a size of the ref panel (eg `20000` to represent 20k individuals)
 fix_Fstatistic_at=30 # average across exposures, not conditional F-statistics
 source('generate_data.R')
+plot_simdata()
 ################################################################################
 ### The global environment will now contain
 # `bx`: standardized associations with the exposure(s)

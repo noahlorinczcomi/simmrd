@@ -84,4 +84,33 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   ix=ord[1:wf,1]
   return(list(ix=ix,fs=fs))
 }
-
+plot_simdata=function() {
+  if(!require('ggplot2')) install.packages('ggplot2',repos='http://cran.us.r-project.org')
+  library(ggplot2)
+  cm=colMeans(as.matrix(bxse)); Ruu=diag(cm)%*%RhoME[-1,-1]%*%diag(cm)
+  lpse=t(theta)%*%Ruu%*%theta
+  lpse=sqrt(lpse)
+  pdf=data.frame(lp=c(bx%*%theta),y=c(by),lpse=lpse,yse=c(byse),label=IVtype)
+  slp=t(pdf$y)%*%pdf$lp/sum(pdf$lp^2)
+  bxt=chol(solve(LD))%*%as.matrix(bx)%*%chol(solve(Ruu))
+  Fs=mean(colSums(bx^2)); 
+  mx=length(c(by))
+  Fs=(nX-mx-1)/(mx)*Fs/(1-Fs)
+  Fs=paste0('F=',round(Fs))
+  annopos=c(min(c(bx)), max(c(by)))*0.75
+  if(ncol(bx)==1) xl='SNP-exposure association' else xl='linear predictor for SNP-exposures associations'
+  p=ggplot(pdf,aes(lp,y,fill=label)) +
+    geom_errorbar(aes(ymin=y-2*yse,ymax=y+2*yse),width=0,color='gray60') +
+    geom_errorbarh(aes(xmin=lp-2*lpse,xmax=lp+2*lpse),height=0,color='gray60') +
+    geom_point(pch=21,size=2) +
+    geom_vline(xintercept=0,linetype='dashed') +
+    geom_hline(yintercept=0,linetype='dashed') +
+    geom_abline(intercept=0,slope=1,color='gray80') +
+    geom_abline(intercept=0,slope=slp) +
+    theme_bw() +
+    annotate('text',x=annopos[1],y=annopos[2],label=Fs) +
+    labs(x=xl,y='SNP-outcome associations') +
+    theme(legend.position='bottom')+
+    guides(fill=guide_legend(title='IV type',override.aes=list(size=3)))
+  p
+}

@@ -82,13 +82,9 @@ for(j in 1:ncol(bx)) {
   bx[,j]=fit$est
   bxse[,j]=fit$std
 }
-### uncomment if you want to see plots
-# par(mfrow=c(1,2))
-# pfun(B%*%theta,B%*%theta+piy*gammaC+gammaU,chpix,uhpix,xlab='bx*theta',ylab='by')
-# pfun(bx%*%theta,by,chpix,uhpix,xlab='bxhat*theta',ylab='byhat')
 ### standardize?
 bx_unstd=bx; bxse_unstd=bxse; by_unstd=by; byse_unstd=byse
-data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,sample_size_Y,MR_standardization_type)
+data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,sample_size_Y,MR_standardization)
 bx=data$bx;bxse=data$bxse;by=data$by;byse=data$byse; m=nrow(bx)
 ### instrument selection based on P-value
 ######
