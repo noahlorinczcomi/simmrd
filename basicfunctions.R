@@ -85,15 +85,13 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   return(list(ix=ix,fs=fs))
 }
 plot_simdata=function() {
-  if(!require('ggplot2')) install.packages('ggplot2',repos='http://cran.us.r-project.org')
-  library(ggplot2)
   cm=colMeans(as.matrix(bxse)); Ruu=diag(cm)%*%RhoME[-1,-1]%*%diag(cm)
   lpse=t(theta)%*%Ruu%*%theta
   lpse=sqrt(lpse)
   pdf=data.frame(lp=c(bx%*%theta),y=c(by),lpse=lpse,yse=c(byse),label=IVtype)
   slp=t(pdf$y)%*%pdf$lp/sum(pdf$lp^2)
-  bxt=chol(solve(LD))%*%as.matrix(bx)%*%chol(solve(Ruu))
-  Fs=mean(colSums(bx^2)); 
+  #bxt=chol(solve(LD))%*%as.matrix(bx)%*%chol(solve(Ruu))
+  Fs=mean(colSums(bx_unstd^2)); 
   mx=length(c(by))
   Fs=(nX-mx-1)/(mx)*Fs/(1-Fs)
   Fs=paste0('F=',round(Fs))
