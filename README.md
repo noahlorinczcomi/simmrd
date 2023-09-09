@@ -113,7 +113,10 @@ source('generate_data.R')
 ################################################################################
 ```
 
-Every time you run the `source(generate_data.R)` command, new simulation data will be generated. An example of how you use `simmr` to perform MVMR using IVW and MRBEE is this:
+Every time you run the `source(generate_data.R)` command, new simulation data will be generated. You can view a plot of your simulated data by (exactly) running `plot_simdata()`, which will produce output like this:
+![](https://github.com/noahlorinczcomi/simmr/blob/main/example_plotsimdata.svg)
+
+An example of how you use `simmr` to perform MVMR using IVW and MRBEE is this:
 ```R
 # begin session
 # set parameters:
