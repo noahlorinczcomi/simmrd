@@ -47,11 +47,11 @@ eX=rmvn(nall,rep(0,number_of_exposures),SigmaEX)
 X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
 ### model for Y
 vXY=Y_variance_explained_by_Xs
-theta=vXY*signs_of_causal_effects
-#theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
-#theta=theta*signs_of_causal_effects
-#adj=vXY/sum(theta^2)
-#theta=sqrt(adj)*theta
+#theta=vXY*signs_of_causal_effects
+theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
+theta=theta*signs_of_causal_effects
+adj=vXY/sum(theta^2)
+theta=sqrt(adj)*theta
 piy=-1*sqrt(Y_variance_explained_by_U) # always negative
 gammaU=rep(0,number_of_causal_SNPs)
 if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
