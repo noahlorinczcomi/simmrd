@@ -85,6 +85,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   return(list(ix=ix,fs=fs))
 }
 plot_simdata=function() {
+  nX=sample_size_Xs
   cm=colMeans(as.matrix(bxse)); Ruu=diag(cm)%*%RhoME[-1,-1]%*%diag(cm)
   lpse=t(theta)%*%Ruu%*%theta
   lpse=sqrt(lpse)
@@ -100,7 +101,6 @@ plot_simdata=function() {
   p=ggplot(pdf,aes(lp,y,fill=label)) +
     geom_errorbar(aes(ymin=y-2*yse,ymax=y+2*yse),width=0,color='gray60') +
     geom_errorbarh(aes(xmin=lp-2*lpse,xmax=lp+2*lpse),height=0,color='gray60') +
-    geom_point(pch=21,size=2) +
     geom_vline(xintercept=0,linetype='dashed') +
     geom_hline(yintercept=0,linetype='dashed') +
     geom_abline(intercept=0,slope=1,color='gray80') +
@@ -109,6 +109,7 @@ plot_simdata=function() {
     annotate('text',x=annopos[1],y=annopos[2],label=Fs) +
     labs(x=xl,y='SNP-outcome associations') +
     theme(legend.position='bottom')+
-    guides(fill=guide_legend(title='IV type',override.aes=list(size=3)))
+    guides(fill=guide_legend(title='IV type',override.aes=list(size=3))) +
+    geom_point(pch=21,size=2)
   p
 }

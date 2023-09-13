@@ -29,11 +29,12 @@ K=kronecker(GenCorrXX,LD)
 Thsq=chol(solve(LD))
 B=rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
 B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
 th=chol(solve(GenCorrXX))
 cop=pnorm(B%*%th)
 #cor(cop)
 cop=cop%*%chol(GenCorrXX)
-list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+#list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
 # rescale to match heritability
 adj=Xs_variance_explained_by_g/colSums(B^2)
 for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -46,10 +47,11 @@ eX=rmvn(nall,rep(0,number_of_exposures),SigmaEX)
 X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
 ### model for Y
 vXY=Y_variance_explained_by_Xs
-theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
-theta=theta*signs_of_causal_effects
-adj=vXY/sum(theta^2)
-theta=sqrt(adj)*theta
+theta=vXY*signs_of_causal_effects
+#theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
+#theta=theta*signs_of_causal_effects
+#adj=vXY/sum(theta^2)
+#theta=sqrt(adj)*theta
 piy=-1*sqrt(Y_variance_explained_by_U) # always negative
 gammaU=rep(0,number_of_causal_SNPs)
 if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
@@ -66,7 +68,9 @@ if(number_of_UHP_causal_SNPs>0) {
 }
 vUHPY=Y_variance_explained_by_UHP
 eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
-Y=X%*%theta+piy*U+G%*%gammaU+eY
+etaX=X%*%theta
+#if(length(chpix)>0) etaX[which(gammaC!=0)]=0
+Y=etaX+piy*U+G%*%gammaU+eY
 RhoXY=cor(cbind(Y,X))
 Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
 p=ncol(B);nY=length(indY); nX=sample_size_Xs
