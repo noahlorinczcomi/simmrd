@@ -77,11 +77,13 @@ To generate simulated GWAS summary statistics using these parameters and assign 
 gwas_data=generate_individual(individual_params)
 ```
 # Plotting simulated data
+
 If you used ```generate_summary()```, execute the following in R:
 ```R
 plot_simdata(gwas_data,summary_params) 
 ```
 ![](p1.svg)
+
 If you used ```generate_individual()```, execute the following in R:
 ```R
 plot_simdata(gwas_data,individual_params) 
