@@ -20,7 +20,6 @@ params=list(
     number_of_CHP_causal_SNPs=10, # scalar
     Y_variance_explained_by_UHP=0.05, # scalar
     U_variance_explained_by_CHP=0.05, # scalar
-    mafs_of_causal_SNPs=0.3, # scalar
     LD_causal_SNPs='I', # scalar or string (string examples: 'toeplitz','ar1(0.5)', or 'I')
     number_of_LD_blocks=1, # number of independent LD blocks
     ### Standardizing MR data
