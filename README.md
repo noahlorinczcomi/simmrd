@@ -29,5 +29,7 @@ It is shown in the [Tutorial](https://github.com/noahlorinczcomi/simmr/blob/main
 11. `by_unstd`: $m\times 1$ vector of unstandardized GWAS-estimated associations between the $m$ IVs and outcome
 12. `bxse_unstd`: $m\times p$ matrix of estimated standard errors corresponding to `bx_unstd`
 13. `byse_unstd`: $m\times 1$ vector of estimated standard errors corresponding to `by_unstd`
-14. `true_variance_explained`: scalar value representing the true outcome variance explained by the causal effects of the exposures
-    - When the user elects to use `generate_summary()` to generate their data, this value is calculated as `true_variance_explained`$:=\rho^2_{\alpha|\beta}=\boldsymbol\theta^\top(\mathbf{B}^\top\mathbf{R}\mathbf{B}+\boldsymbol\Sigma_\varepsilon)\boldsymbol\theta$, where $\mathbf{x}=\mathbf{B}^\top\mathbf{g}+\boldsymbol\varepsilon$, $\mathbf{g}$ is a vector of causal exposure SNP genotypes, $\mathbf{R}=\text{Cov}(\mathbf{g})$, and $\boldsymbol\Sigma_\varepsilon=\text{Cov}(\boldsymbol\epsilon)$.
+<!--
+15. `true_variance_explained`: scalar value representing the true outcome variance explained by the causal effects of the exposures
+    - When the user elects to use `generate_summary()` to generate their data, this value is calculated as `true_variance_explained`$:=\rho^2_{\alpha|\beta}=\boldsymbol\theta^\top(\mathbf{B}^\top\mathbf{R}\mathbf{B}+\boldsymbol\Sigma_\varepsilon)\boldsymbol\theta$, where $\mathbf{x}=\mathbf{B}^\top\mathbf{g}+\boldsymbol\varepsilon$, $\mathbf{g}$ is a vector of causal exposure SNP genotypes, $\mathbf{R}=\text{Cov}(\mathbf{g})$, and $\boldsymbol\Sigma_\varepsilon=\text{Cov}(\boldsymbol\epsilon
+-->
