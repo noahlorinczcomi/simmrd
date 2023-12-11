@@ -1,9 +1,7 @@
 # General Steps
-`simmr` can generate simulated data either by (i) first generating individual-level data and performing GWAS (`generate_individual()`) or (ii) directly by generating the GWAS summary statistics from known distributions (`generate_summary()`). `generate_individual()` allows the user to explicitly specify confounding effects in the data-generating process, whereas `generate_summary()` can only generate GWAS summary statistics which imply confounding but which is significantly computationally faster.
-
-The steps to generate and plot data using the ```simmr``` R package are the following:
-1) Define a named list of parameters which are relevant to the type of simulated data you are generating. Call this list ```params```. 
-    - The lists of parameters depends on the type of simulated data you ultimately want to generate. See 2) for more details.
+The steps to generating and plotting data using the ```simmr``` R package are the following:
+1) Define a named list of parameters which are relevant to the type of simulated data you are generated. Call this list ```params```. 
+    - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
 2) Give your list of parameters to either ```generate_summary(params)``` or ```generate_individual(params)```.
 
 # Using ```generate_summary()```
@@ -79,13 +77,11 @@ To generate simulated GWAS summary statistics using these parameters and assign 
 gwas_data=generate_individual(individual_params)
 ```
 # Plotting simulated data
-
 If you used ```generate_summary()```, execute the following in R:
 ```R
 plot_simdata(gwas_data,summary_params) 
 ```
 ![](p1.svg)
-
 If you used ```generate_individual()```, execute the following in R:
 ```R
 plot_simdata(gwas_data,individual_params) 
