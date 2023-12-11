@@ -26,11 +26,13 @@ generate_individual=function(params){
            "\t- `number_of_CHP_causal_SNPs`\n")
     }
     if(length(Y_variance_explained_by_Xs)==1) Y_variance_explained_by_Xs=rep(Y_variance_explained_by_Xs,number_of_exposures)
+    if(length(prop_gwas_overlap_Xs_and_Y)==1) prop_gwas_overlap_Xs_and_Y=rep(prop_gwas_overlap_Xs_and_Y,number_of_exposures)
   # generate data
     n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
     nall=sample_size_Y+sample_size_Xs-n0_xy
     indY=1:sample_size_Y
     indX=(nall-sample_size_Xs+1):nall
+    mafs_of_causal_SNPs=0.3 
     G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
     G=matrix(G,nr=nall,nc=number_of_causal_SNPs)
     G=apply(G,2,std)
@@ -95,9 +97,9 @@ generate_individual=function(params){
     adj=Y_variance_explained_by_UHP/sum(gammaU_^2)
     gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
     }
-    IVtype=rep('valid',m)
-    IVtype[uhpix]='UHP'
-    IVtype[chpix]='CHP'
+    IVtype=rep('valid',number_of_causal_SNPs)
+    if(length(uhpix)>0) IVtype[uhpix]='UHP'
+    if(length(chpix)>0) IVtype[chpix]='CHP'
     vUHPY=Y_variance_explained_by_UHP
     eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
     etaX=X%*%theta
@@ -173,6 +175,8 @@ generate_individual=function(params){
     by=by[ix];byse=byse[ix]
     bx_unstd=as.matrix(bx_unstd[ix,]); bxse_unstd=as.matrix(bxse_unstd[ix,])
     by_unstd=by_unstd[ix]; byse_unstd=byse_unstd[ix]
+    # if only have one IV selected
+    if(length(by)==1) {bx=t(bx);bxse=t(bxse);bx_unstd=t(bx_unstd);bxse_unstd=t(bxse_unstd)} 
     # verify weak IV set
     # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
     # h2=colSums(bx_unstd^2)
@@ -181,7 +185,7 @@ generate_individual=function(params){
     # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
     nn=c('Outcome',paste0('Exposure',1:p))
     rownames(RhoME)=colnames(RhoME)=nn
-    out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=theta,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd,bxunstd_all=bxunstd_all,bxseunstd_all=bxseunstd_all,byunstd_all=byunstd_all,byseunstd_all=byseunstd_all,true_variance_explained=rho2)
+    out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=theta,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd)
     return(out)
 }
 
@@ -258,7 +262,7 @@ generate_summary=function(params) {
     ix0=match('valid',IVtype)+1
     ix=ix0:(ix0+number_of_UHP_causal_SNPs-1)
     IVtype[ix]='UHP'
-    gammaU[ix]=rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))*sample(c(-1,1),length(ix),replace=T)
+    gammaU[ix]=rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))
   }
   # Bhat, ahat
   valid_ix=which(IVtype=='valid')
@@ -276,6 +280,7 @@ generate_summary=function(params) {
   ### IV selection
   ### standardize?
   bx_unstd=bx; bxse_unstd=bxse; by_unstd=by; byse_unstd=byse
+  mafs_of_causal_SNPs=0.3
   data=parthstd(bx,by,bxse,byse,mafs_of_causal_SNPs,sample_size_Xs,sample_size_Y,MR_standardization)
   bx=data$bx;bxse=data$bxse;by=data$by;byse=data$byse; m=nrow(bx)
   ### saving GWAS estimates from all SNPs
@@ -340,7 +345,7 @@ generate_summary=function(params) {
   # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
   nn=c('Outcome',paste0('Exposure',1:p))
   rownames(RhoME)=colnames(RhoME)=nn
-  out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=true_causal_effects,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd,bxunstd_all=bxunstd_all,bxseunstd_all=bxseunstd_all,byunstd_all=byunstd_all,byseunstd_all=byseunstd_all,true_variance_explained=rho2)
+  out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=true_causal_effects,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd)
   return(out)
 }
 
