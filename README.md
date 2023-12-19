@@ -8,6 +8,7 @@ or
 devtools::install_github('noahlorinczcomi/simmr')
 ```
 # Paper
+The paper has changed substantially from the version which is publicly available as a [preprint](https://doi.org/10.1101/2023.09.11.556975) and will be published in the journal of Genetic Epidemiology.
 
 # Tutorial
 Please follow our [Tutorial](https://github.com/noahlorinczcomi/simmr/blob/main/tutorial.md) to learn how to generate GWAS summary data for use in MR simulations.
