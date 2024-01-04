@@ -134,7 +134,7 @@ generate_individual=function(params){
     ### did user want to imprecisely estimate LD among the IVs?
     R=LD
     R0=R
-    if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
+    if(N_of_LD_ref<Inf) R=stats::rWishart(1,N_of_LD_ref,R)[,,1]
     if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
     ### any P-value pruning?
     st=tolower(substr(simtype,start=1,stop=3))
@@ -292,7 +292,7 @@ generate_summary=function(params) {
   RhoME=stats::cov2cor(Pwu)
   ### did user want to imprecisely estimate LD among the IVs?
   R0=R
-  if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
+  if(N_of_LD_ref<Inf) R=stats::rWishart(1,N_of_LD_ref,R)[,,1]
   if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
   ### any P-value pruning?
   st=tolower(substr(simtype,start=1,stop=3))
