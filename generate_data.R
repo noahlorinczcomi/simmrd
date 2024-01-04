@@ -32,9 +32,9 @@ B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
 if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
 th=chol(solve(GenCorrXX))
 cop=pnorm(B%*%th)
-#cor(cop)
+#stats::cor(cop)
 cop=cop%*%chol(GenCorrXX)
-#list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+#list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
 # rescale to match heritability
 adj=Xs_variance_explained_by_g/colSums(B^2)
 for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -71,7 +71,7 @@ eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
 etaX=X%*%theta
 #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
 Y=etaX+piy*U+G%*%gammaU+eY
-RhoXY=cor(cbind(Y,X))
+RhoXY=stats::cor(cbind(Y,X))
 Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
 p=ncol(B);nY=length(indY); nX=sample_size_Xs
 nn=sqrt(c(nY,rep(nX,p)));nn=nn%*%t(nn) # for RhoME (correlations between measurement errors)

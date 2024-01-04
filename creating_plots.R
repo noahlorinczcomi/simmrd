@@ -54,7 +54,7 @@ source('generate_data.R')
 ### plot of UHP,CHP,Valid,Weak IVs
 library(dplyr);library(ggplot2)
 df=data.frame(type=IVtype,lp=bx%*%theta,lpse=stats::median(bxse),y=c(by),lpse=1,yse=c(byse))
-df %>% filter(type=='valid') %>% select(lp,y) %>% as.matrix() %>% cor()
+df %>% filter(type=='valid') %>% select(lp,y) %>% as.matrix() %>% stats::cor()
 ao=lm(y~lp,data=df %>% filter(type=='valid'))
 df %>%
   ggplot(aes(lp,y,fill=type)) +

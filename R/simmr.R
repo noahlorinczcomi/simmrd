@@ -62,9 +62,9 @@ generate_individual=function(params){
     if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
     th=chol(solve(GenCorrXX))
     cop=pnorm(B%*%th)
-    #cor(cop)
+    #stats::cor(cop)
     cop=cop%*%chol(GenCorrXX)
-    #list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+    #list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
     # rescale to match heritability
     adj=Xs_variance_explained_by_g/colSums(B^2)
     for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
