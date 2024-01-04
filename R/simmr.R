@@ -456,8 +456,8 @@ pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
   lu=length(uhpix)>0
-  if(lc) points(x[chpix],y[chpix],col='royalblue',pch=16)
-  if(lu) points(x[uhpix],y[uhpix],col='indianred',pch=16)
+  if(lc) graphics::points(x[chpix],y[chpix],col='royalblue',pch=16)
+  if(lu) graphics::points(x[uhpix],y[uhpix],col='indianred',pch=16)
   if(lc & !lu) legend('bottomright','CHP',pch=16,col='royalblue')
   if(!lc & lu) legend('bottomright','UHP',pch=16,col='indianred')
   if(lc & lu) legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
