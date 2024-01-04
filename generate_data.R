@@ -12,7 +12,7 @@ G=apply(G,2,std)
 gammaC=rep(0,number_of_causal_SNPs)
 if(number_of_CHP_causal_SNPs>0) {
   chpix=1:number_of_CHP_causal_SNPs
-  gammaC_=runif(number_of_CHP_causal_SNPs,-1/2,1/2);
+  gammaC_=stats::runif(number_of_CHP_causal_SNPs,-1/2,1/2);
   adj=U_variance_explained_by_CHP/sum(gammaC_^2)
   gammaC_=sqrt(adj)*gammaC_; gammaC[chpix]=-gammaC_
 } else {
@@ -62,7 +62,7 @@ if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
   uhpix=c()
 }
 if(number_of_UHP_causal_SNPs>0) {
-  gammaU_=runif(number_of_UHP_causal_SNPs,-1,1);
+  gammaU_=stats::runif(number_of_UHP_causal_SNPs,-1,1);
   adj=Y_variance_explained_by_UHP/sum(gammaU_^2)
   gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
 }
