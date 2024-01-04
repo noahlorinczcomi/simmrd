@@ -9,8 +9,7 @@ Description: This package generates simulation data to use in the
     methods. MR scenarios can include uncorrelated horizontal pleiotropy,
     correlated horizontal pleiotropy, weak instruments, winner's curse,
     and correlated SNP instruments.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 URL: https://github.com/noahlorinczcomi/simmr
 BugReports: https://github.com/noahlorinczcomi/simmr/issues
 Imports:
