@@ -154,7 +154,7 @@ generate_individual=function(params){
         # if user wants the union set of significant SNPs as IVs in MVMR
     } else {
         z=bx/bxse
-        keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
+        keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
     }
       ix=pruning(pjs[keep],LD[keep,keep],LD_pruning_r2)
       ix=keep[ix]
@@ -312,7 +312,7 @@ generate_summary=function(params) {
       # if user wants the union set of significant SNPs as IVs in MVMR
     } else {
       z=bx/bxse
-      keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
+      keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
       pjs=apply(z^2,1,function(h)stats::pchisq(h,1,lower.tail=FALSE))
     }
     if(length(keep)==0) stop('no IVs were selected given your selection criteria')
@@ -642,7 +642,7 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
         total=TRUE
         bxi=data0$bx[,i]
         bxsei=data0$bxse[,i]
-        ixi=which((bxi/bxsei)^2>qchisq(1-params$IV_Pvalue_threshold,1))
+        ixi=which((bxi/bxsei)^2>stats::qchisq(1-params$IV_Pvalue_threshold,1))
         if(length(ixi)==0) {
           if(verbose) cat('Exposure ', i, ' has no significant IVs\n',sep='')
           doskip=TRUE

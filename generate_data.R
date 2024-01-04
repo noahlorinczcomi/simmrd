@@ -109,7 +109,7 @@ if(st=='win') {
     # if user wants the union set of significant SNPs as IVs in MVMR
   } else {
     z=bx/bxse
-    keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
+    keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
   }
   ix=pruning(pjs[keep],LD[keep,keep],LD_pruning_r2)
   ix=keep[ix]
