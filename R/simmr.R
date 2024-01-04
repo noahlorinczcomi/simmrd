@@ -105,8 +105,8 @@ generate_individual=function(params){
     etaX=X%*%theta
     #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
     Y=etaX+piy*U+G%*%gammaU+eY
-    cyx=c(cov(X,Y))
-    rho2=t(cyx)%*%solve(cov(X))%*%cyx
+    cyx=c(stats::cov(X,Y))
+    rho2=t(cyx)%*%solve(stats::cov(X))%*%cyx
     RhoXY=cor(cbind(Y,X))
     Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
     p=ncol(B);nY=length(indY); nX=sample_size_Xs
