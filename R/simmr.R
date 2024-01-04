@@ -61,7 +61,7 @@ generate_individual=function(params){
     B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
     if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
     th=chol(solve(GenCorrXX))
-    cop=pnorm(B%*%th)
+    cop=stats::pnorm(B%*%th)
     #stats::cor(cop)
     cop=cop%*%chol(GenCorrXX)
     #list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
