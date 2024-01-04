@@ -419,7 +419,7 @@ ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 #' @export
 #' @examples
 #' std()
-std=function(x) (x-mean(x))/sd(x)
+std=function(x) (x-mean(x))/stats::sd(x)
 
 #' Helper function
 #'

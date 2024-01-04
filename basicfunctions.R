@@ -13,7 +13,7 @@ biggwas=function(x,G){
   return(A)
 }
 ar1=function(n,rho=0.5) {x=matrix(rho,n,n)^(stats::toeplitz(1:n)-1);diag(x)=1;x}
-std=function(x) (x-mean(x))/sd(x)
+std=function(x) (x-mean(x))/stats::sd(x)
 parthcorr=function(x,n) {
   keys=c('ar','toeplitz','cs')
   boo=sapply(keys,function(h) grepl(h,tolower(x),fixed=TRUE))
