@@ -48,7 +48,7 @@ generate_individual=function(params){
     chpix=c()
     }
     ### setting U
-    eU=rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
+    eU=stats::rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
     U=G%*%gammaC+eU
     ### setting X
     CorrXX=parthcorr(phenotypic_correlation_Xs,n=number_of_exposures)
@@ -101,7 +101,7 @@ generate_individual=function(params){
     if(length(uhpix)>0) IVtype[uhpix]='UHP'
     if(length(chpix)>0) IVtype[chpix]='CHP'
     vUHPY=Y_variance_explained_by_UHP
-    eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
+    eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
     etaX=X%*%theta
     #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
     Y=etaX+piy*U+G%*%gammaU+eY
@@ -255,14 +255,14 @@ generate_summary=function(params) {
   if(ratio_of_CHP_variance>0 & number_of_CHP_causal_SNPs>0) {
     ix=1:number_of_CHP_causal_SNPs
     IVtype[ix]='CHP'
-    gammaC[ix]=as.matrix(B[ix,])%*%c(true_causal_effects)*(-1+CHP_correlation)+rnorm(length(ix),0,sqrt(ratio_of_CHP_variance*lp_var))
+    gammaC[ix]=as.matrix(B[ix,])%*%c(true_causal_effects)*(-1+CHP_correlation)+stats::rnorm(length(ix),0,sqrt(ratio_of_CHP_variance*lp_var))
   }
   # UHP
   if(ratio_of_UHP_variance>0 & number_of_UHP_causal_SNPs>0) {
     ix0=match('valid',IVtype)+1
     ix=ix0:(ix0+number_of_UHP_causal_SNPs-1)
     IVtype[ix]='UHP'
-    gammaU[ix]=rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))
+    gammaU[ix]=stats::rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))
   }
   # Bhat, ahat
   valid_ix=which(IVtype=='valid')

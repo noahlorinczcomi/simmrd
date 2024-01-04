@@ -19,7 +19,7 @@ if(number_of_CHP_causal_SNPs>0) {
   chpix=c()
 }
 ### setting U
-eU=rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
+eU=stats::rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
 U=G%*%gammaC+eU
 ### setting X
 CorrXX=parthcorr(phenotypic_correlation_Xs,n=number_of_exposures)
@@ -67,7 +67,7 @@ if(number_of_UHP_causal_SNPs>0) {
   gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
 }
 vUHPY=Y_variance_explained_by_UHP
-eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
+eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
 etaX=X%*%theta
 #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
 Y=etaX+piy*U+G%*%gammaU+eY
