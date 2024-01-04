@@ -103,7 +103,7 @@ if(st=='win') {
       Th=diag(bxse[j,])%*%Ruu%*%diag(bxse[j,])
       Th=solve(Th)
       v=t(bx[j,])%*%Th%*%bx[j,]
-      pj=1-pchisq(v,p); pjs[j]=pj
+      pj=1-stats::pchisq(v,p); pjs[j]=pj
       if(pj<IV_Pvalue_threshold) keep=c(keep,j)
     }
     # if user wants the union set of significant SNPs as IVs in MVMR

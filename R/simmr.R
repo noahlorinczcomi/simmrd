@@ -148,7 +148,7 @@ generate_individual=function(params){
           Th=diag(D_,length(D_))%*%as.matrix(Ruu)%*%diag(D_,length(D_))
           Th=solve(Th)
           v=t(bx[j,])%*%Th%*%bx[j,]
-          pj=1-pchisq(v,p); pjs[j]=pj
+          pj=1-stats::pchisq(v,p); pjs[j]=pj
           if(pj<IV_Pvalue_threshold) keep=c(keep,j)
         }
         # if user wants the union set of significant SNPs as IVs in MVMR
@@ -306,14 +306,14 @@ generate_summary=function(params) {
         Th=diag(D_,length(D_))%*%as.matrix(Ruu)%*%diag(D_,length(D_))
         Th=solve(Th)
         v=t(bx[j,])%*%Th%*%bx[j,]
-        pj=pchisq(v,p,lower.tail=FALSE); pjs[j]=pj
+        pj=stats::pchisq(v,p,lower.tail=FALSE); pjs[j]=pj
         if(pj<IV_Pvalue_threshold) keep=c(keep,j)
       }
       # if user wants the union set of significant SNPs as IVs in MVMR
     } else {
       z=bx/bxse
       keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
-      pjs=apply(z^2,1,function(h)pchisq(h,1,lower.tail=FALSE))
+      pjs=apply(z^2,1,function(h)stats::pchisq(h,1,lower.tail=FALSE))
     }
     if(length(keep)==0) stop('no IVs were selected given your selection criteria')
     ix=pruning(pjs[keep],R[keep,keep],LD_pruning_r2)
