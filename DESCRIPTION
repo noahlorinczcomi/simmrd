@@ -13,6 +13,9 @@ License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 URL: https://github.com/noahlorinczcomi/simmr
 BugReports: https://github.com/noahlorinczcomi/simmr/issues
+Imports:
+    ggplot2,
+    mvnfast
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
