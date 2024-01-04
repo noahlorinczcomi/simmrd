@@ -12,13 +12,13 @@ biggwas=function(x,G){
   A$std=as.vector(sqrt(sdb))
   return(A)
 }
-ar1=function(n,rho=0.5) {x=matrix(rho,n,n)^(toeplitz(1:n)-1);diag(x)=1;x}
+ar1=function(n,rho=0.5) {x=matrix(rho,n,n)^(stats::toeplitz(1:n)-1);diag(x)=1;x}
 std=function(x) (x-mean(x))/sd(x)
 parthcorr=function(x,n) {
   keys=c('ar','toeplitz','cs')
   boo=sapply(keys,function(h) grepl(h,tolower(x),fixed=TRUE))
   if(boo[1]) return(ar1(n,as.numeric(substr(x,start=5,stop=nchar(x)-1))))
-  if(boo[2]) return(1/toeplitz(1:n))
+  if(boo[2]) return(1/stats::toeplitz(1:n))
   if(boo[3]) {a_=as.numeric(substr(x,start=4,stop=nchar(x)-1)); return(diag(n)+a_-diag(a_,n))}
   return(diag(n))
 }

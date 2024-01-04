@@ -409,7 +409,7 @@ biggwas=function(x,G){
 #' @export
 #' @examples
 #' ar1()
-ar1=function(n,rho=0.5) rho^toeplitz(0:(n-1))
+ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 
 #' Helper function
 #'
@@ -436,7 +436,7 @@ parthcorr=function(x,n) {
   keys=c('ar','toeplitz','cs')
   boo=sapply(keys,function(h) grepl(h,tolower(x),fixed=TRUE))
   if(boo[1]) return(ar1(n,as.numeric(substr(x,start=5,stop=nchar(x)-1))))
-  if(boo[2]) return(1/toeplitz(1:n))
+  if(boo[2]) return(1/stats::toeplitz(1:n))
   if(boo[3]) {a_=as.numeric(substr(x,start=4,stop=nchar(x)-1)); return(diag(n)+a_-diag(a_,n))}
   return(diag(n))
 }
