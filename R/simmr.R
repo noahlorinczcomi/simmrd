@@ -269,9 +269,9 @@ generate_summary=function(params) {
   a=a+gammaU+gammaC
   by=a+wu[,1]
   bx=B+wu[,-1]
-  bxse=bx*0; for(i in 1:p) bxse[,i]=rchisq(number_of_causal_SNPs,Nxx[i]-1)/(Nxx[i]-1)/Nxx[i] # sigma2=1/Nxx[i]
+  bxse=bx*0; for(i in 1:p) bxse[,i]=stats::rchisq(number_of_causal_SNPs,Nxx[i]-1)/(Nxx[i]-1)/Nxx[i] # sigma2=1/Nxx[i]
   bxse=sqrt(bxse)
-  byse=rchisq(number_of_causal_SNPs,sample_size_Y-1)/(sample_size_Y-1)/sample_size_Y
+  byse=stats::rchisq(number_of_causal_SNPs,sample_size_Y-1)/(sample_size_Y-1)/sample_size_Y
   byse=sqrt(byse)
   # cols=rep('black',number_of_causal_SNPs)
   # cols[IVtype=='UHP']='red'
