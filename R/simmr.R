@@ -135,7 +135,7 @@ generate_individual=function(params){
     R=LD
     R0=R
     if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
-    if(length(c(R))>1) R=cov2cor(R) else R=R/N_of_LD_ref
+    if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
     ### any P-value pruning?
     st=tolower(substr(simtype,start=1,stop=3))
     if(st=='win') {
@@ -289,11 +289,11 @@ generate_summary=function(params) {
   byunstd_all=by
   byseunstd_all=byse
   ### measurement error correlation matrix
-  RhoME=cov2cor(Pwu)
+  RhoME=stats::cov2cor(Pwu)
   ### did user want to imprecisely estimate LD among the IVs?
   R0=R
   if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
-  if(length(c(R))>1) R=cov2cor(R) else R=R/N_of_LD_ref
+  if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
   ### any P-value pruning?
   st=tolower(substr(simtype,start=1,stop=3))
   if(st=='win') {

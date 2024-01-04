@@ -129,7 +129,7 @@ bx_unstd=bx_unstd[ix,]; bxse_unstd=bxse_unstd[ix,]
 IVtype=classIVs(ix,uhpix,chpix)
 el=ls()
 ### did user want to imprecisely estimate LD among the IVs?
-if(N_of_LD_ref<Inf) {LD=rWishart(1,N_of_LD_ref,LD)[,,1]; LD=cov2cor(LD)}
+if(N_of_LD_ref<Inf) {LD=rWishart(1,N_of_LD_ref,LD)[,,1]; LD=stats::cov2cor(LD)}
 # verify weak IV set
 # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
 # h2=colSums(bx_unstd^2)
