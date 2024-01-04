@@ -33,7 +33,7 @@ generate_individual=function(params){
     indY=1:sample_size_Y
     indX=(nall-sample_size_Xs+1):nall
     mafs_of_causal_SNPs=0.3 
-    G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
+    G=stats::rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
     G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
     G=apply(G,2,std)
     # order will go UHP, CHP, valid, weak

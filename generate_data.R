@@ -4,7 +4,7 @@ n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
 nall=sample_size_Y+sample_size_Xs-n0_xy
 indY=1:sample_size_Y
 indX=(nall-sample_size_Xs+1):nall
-G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
+G=stats::rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
 G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
 G=apply(G,2,std)
 # order will go UHP, CHP, valid, weak
