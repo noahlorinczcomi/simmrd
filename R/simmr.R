@@ -560,7 +560,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   for(i in 1:m) {
     ixi=ord[1:i,1]
     h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,ncol=p)))
-    a[i]=(median(nX)-i-1)/i
+    a[i]=(stats::median(nX)-i-1)/i
     b[i]=h2s[i]/(1-h2s[i])
   }
   fs=a*b
