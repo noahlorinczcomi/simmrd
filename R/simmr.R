@@ -34,7 +34,7 @@ generate_individual=function(params){
     indX=(nall-sample_size_Xs+1):nall
     mafs_of_causal_SNPs=0.3 
     G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
-    G=matrix(G,nr=nall,nc=number_of_causal_SNPs)
+    G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
     G=apply(G,2,std)
     # order will go UHP, CHP, valid, weak
     ### CHP IVs
@@ -58,7 +58,7 @@ generate_individual=function(params){
     K=kronecker(GenCorrXX,LD)
     Thsq=chol(solve(LD))
     B=mvnfast::rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
-    B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+    B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
     if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
     th=chol(solve(GenCorrXX))
     cop=pnorm(B%*%th)
@@ -74,7 +74,7 @@ generate_individual=function(params){
     sdeX=sqrt(sdeX)
     SigmaEX=sdeX%*%CorrXX%*%sdeX
     eX=mvnfast::rmvn(nall,rep(0,number_of_exposures),SigmaEX)
-    X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
+    X=G%*%B+matrix(pix*U,nrow=nall,ncol=number_of_exposures)+eX
     ### model for Y
     vXY=Y_variance_explained_by_Xs
     #theta=vXY*signs_of_causal_effects
@@ -116,7 +116,7 @@ generate_individual=function(params){
     ### GWAS
     gwas_y=biggwas(Y[indY],G[indY,]) # indY created near the top
     by=gwas_y$est; byse=gwas_y$std
-    bx=bxse=matrix(nr=number_of_causal_SNPs,nc=number_of_exposures)
+    bx=bxse=matrix(nrow=number_of_causal_SNPs,ncol=number_of_exposures)
     for(j in 1:ncol(bx)) {
     fit=biggwas(X[indX,j],G[indX,])
     bx[,j]=fit$est
@@ -503,7 +503,7 @@ pruning=function(jointPs,R,r2) {
   n=nrow(R);
   ps=cbind(1:n,jointPs)
   ps=ps[order(ps[,2]),]
-  ps=matrix(ps,nr=n,nc=2)
+  ps=matrix(ps,nrow=n,ncol=2)
   ord=ps[,1]; ps=ps[,2]
   R0=R[ord,ord]; 
   R0=as.matrix(R0)
@@ -533,7 +533,7 @@ classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
   boo=sapply(1:2,function(h) ix %in% ll[[h]])
-  boo=matrix(boo,nr=length(ix))
+  boo=matrix(boo,nrow=length(ix))
   cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
   return(cl)
 }
@@ -559,7 +559,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   h2s=a=b=c(); 
   for(i in 1:m) {
     ixi=ord[1:i,1]
-    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,nc=p)))
+    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,ncol=p)))
     a[i]=(median(nX)-i-1)/i
     b[i]=h2s[i]/(1-h2s[i])
   }

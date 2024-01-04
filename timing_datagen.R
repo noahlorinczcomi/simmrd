@@ -2,7 +2,7 @@ rm(list=ls(all=TRUE))
 library(mvnfast)
 ns=seq(1e4,5e4,1e4)
 ms=c(10,50,100,250,500)
-res=matrix(nr=length(ms),nc=length(ns))
+res=matrix(nrow=length(ms),ncol=length(ns))
 for(ii in 1:length(ms)) {
   for(kk in 1:length(ns)) {
     sample_size_Xs=ns[kk] # scalar

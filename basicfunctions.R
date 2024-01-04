@@ -61,7 +61,7 @@ classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
   boo=sapply(1:2,function(h) ix %in% ll[[h]])
-  boo=matrix(boo,nr=length(ix))
+  boo=matrix(boo,nrow=length(ix))
   cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
   return(cl)
 }
@@ -75,7 +75,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   h2s=a=b=c(); 
   for(i in 1:m) {
     ixi=ord[1:i,1]
-    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,nc=p)))
+    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,ncol=p)))
     a[i]=(nX-i-1)/i
     b[i]=h2s[i]/(1-h2s[i])
   }

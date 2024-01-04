@@ -5,7 +5,7 @@ nall=sample_size_Y+sample_size_Xs-n0_xy
 indY=1:sample_size_Y
 indX=(nall-sample_size_Xs+1):nall
 G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
-G=matrix(G,nr=nall,nc=number_of_causal_SNPs)
+G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
 G=apply(G,2,std)
 # order will go UHP, CHP, valid, weak
 ### CHP IVs
@@ -28,7 +28,7 @@ LD=parthcorr(LD_causal_SNPs,number_of_causal_SNPs)
 K=kronecker(GenCorrXX,LD)
 Thsq=chol(solve(LD))
 B=rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
-B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
 if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
 th=chol(solve(GenCorrXX))
 cop=pnorm(B%*%th)
@@ -44,7 +44,7 @@ sdeX=diag(1-Xs_variance_explained_by_g-pix^2,number_of_exposures)
 sdeX=sqrt(sdeX)
 SigmaEX=sdeX%*%CorrXX%*%sdeX
 eX=rmvn(nall,rep(0,number_of_exposures),SigmaEX)
-X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
+X=G%*%B+matrix(pix*U,nrow=nall,ncol=number_of_exposures)+eX
 ### model for Y
 vXY=Y_variance_explained_by_Xs
 #theta=vXY*signs_of_causal_effects
@@ -80,7 +80,7 @@ RhoME=no/nn*RhoXY
 ### GWAS
 gwas_y=biggwas(Y[indY],G[indY,]) # indY created near the top
 by=gwas_y$est; byse=gwas_y$std
-bx=bxse=matrix(nr=number_of_causal_SNPs,nc=number_of_exposures)
+bx=bxse=matrix(nrow=number_of_causal_SNPs,ncol=number_of_exposures)
 for(j in 1:ncol(bx)) {
   fit=biggwas(X[indX,j],G[indX,])
   bx[,j]=fit$est
