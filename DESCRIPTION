@@ -14,6 +14,7 @@ URL: https://github.com/noahlorinczcomi/simmr
 BugReports: https://github.com/noahlorinczcomi/simmr/issues
 Imports:
     ggplot2,
+    ggpubr,
     mvnfast
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
