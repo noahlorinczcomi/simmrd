@@ -107,7 +107,7 @@ generate_individual=function(params){
     Y=etaX+piy*U+G%*%gammaU+eY
     cyx=c(stats::cov(X,Y))
     rho2=t(cyx)%*%solve(stats::cov(X))%*%cyx
-    RhoXY=cor(cbind(Y,X))
+    RhoXY=stats::cor(cbind(Y,X))
     Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
     p=ncol(B);nY=length(indY); nX=sample_size_Xs
     nn=sqrt(c(nY,rep(nX,p)));nn=nn%*%t(nn) # for RhoME (correlations between measurement errors)
