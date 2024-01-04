@@ -251,7 +251,7 @@ generate_summary=function(params) {
   # CHP
   IVtype=rep('valid',number_of_causal_SNPs)
   gammaU=gammaC=rep(0,number_of_causal_SNPs)
-  lp_var=var(B%*%c(true_causal_effects)+as.matrix(wu[,-1])%*%c(true_causal_effects)+wu[,1])
+  lp_var=stats::var(B%*%c(true_causal_effects)+as.matrix(wu[,-1])%*%c(true_causal_effects)+wu[,1])
   if(ratio_of_CHP_variance>0 & number_of_CHP_causal_SNPs>0) {
     ix=1:number_of_CHP_causal_SNPs
     IVtype[ix]='CHP'
@@ -388,7 +388,7 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
-  vx=var(x);vx=as.numeric(vx)
+  vx=stats::var(x);vx=as.numeric(vx)
   ug=colMeans(G)
   G=t(t(G)-ug)
   vg=colSums(G^2)

@@ -1,7 +1,7 @@
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
-  vx=var(x);vx=as.numeric(vx)
+  vx=stats::var(x);vx=as.numeric(vx)
   ug=colMeans(G)
   G=t(t(G)-ug)
   vg=colSums(G^2)
