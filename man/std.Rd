@@ -6,6 +6,9 @@
 \usage{
 std(x)
 }
+\arguments{
+\item{x}{Vector to standardise}
+}
 \description{
 Helper function
 }

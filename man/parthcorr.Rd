@@ -7,7 +7,9 @@
 parthcorr(x, n)
 }
 \arguments{
-\item{x}{}
+\item{x}{Matrix or numeric value}
+
+\item{n}{Number of rows and columns of the matrix}
 }
 \description{
 Helper function
