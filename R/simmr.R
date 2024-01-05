@@ -610,9 +610,9 @@ classIVs=function(ix,uhpix,chpix) {
 #' Helper function
 #'
 #' Helper function
-#' @param bxunstd
-#' @param nX
-#' @param fix_Fstatistic_at
+#' @param bxunstd bxunstd
+#' @param nX nX
+#' @param fix_Fstatistic_at Value to fix the F-statistic at
 #' @export
 #' @examples
 #' # setf()
