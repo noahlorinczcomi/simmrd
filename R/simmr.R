@@ -515,7 +515,9 @@ parthcorr=function(x,n) {
 #' @param ... Additional arguments passed to \code{plot()}
 #' @export
 #' @examples
-#' # pfun()
+#' \dontrun{
+#' pfun()
+#' }
 pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
