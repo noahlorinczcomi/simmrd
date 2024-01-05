@@ -4,8 +4,8 @@ The steps to generating and plotting data using the `simmr` R package are the fo
     - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
 2) Give your list of parameters to either `generate_summary(params)` or `generate_individual(params)`.
 
-# Using ```generate_summary()```
 ```R
+# Using generate_summary()
 Below is a named list of parameters to be used with the `generate_summary()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
 summary_params=list(
   sample_size_Xs=30000, # exposure GWAS sample sizes
@@ -40,8 +40,8 @@ To generate simulated GWAS summary statistics using these parameters and assign 
 gwas_data=generate_summary(summary_params)
 ```
 
-# Using ```generate_individual()```
 ```R
+# Using generate_individual()
 Below is a named list of parameters to be used with the `generate_individual()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
 individual_params=list(
     sample_size_Xs=5e4, # exposure GWAS sample sizes
