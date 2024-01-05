@@ -15,5 +15,5 @@ ar1(n, rho = 0.5)
 Helper function
 }
 \examples{
-ar1()
+ar1(2)
 }
