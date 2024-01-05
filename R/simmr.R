@@ -689,10 +689,13 @@ plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
   p
 }
 
-#' Helper function
+#' Plot simulated data
 #'
-#' Helper function
-#' @param data direct output from generate()
+#' Plot simulated data.
+#' @param data direct output from \code{generate()}
+#' @param params Named list of parameters
+#' @param exposure_specific_plot One of \code{'total'}, \code{'joint'}, \code{'conditional'}
+#' @param verbose Logical, default \code{TRUE}
 #' @import ggplot2 
 #' @export
 #' @examples
