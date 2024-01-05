@@ -595,7 +595,9 @@ pruning=function(jointPs,R,r2) {
 #' @param chpix chpix
 #' @export
 #' @examples
-#' # classIVs()
+#' \dontrun{
+#' classIVs()
+#' }
 classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
