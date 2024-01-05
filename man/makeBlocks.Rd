@@ -17,5 +17,5 @@ makeBlocks(LD_causal_SNPs, number_of_causal_SNPs, nblocks = 1)
 Helper function
 }
 \examples{
-makeBlocks()
+# makeBlocks()
 }

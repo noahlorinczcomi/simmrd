@@ -10,5 +10,5 @@ setf(bxunstd, nX, fix_Fstatistic_at)
 Helper function
 }
 \examples{
-setf()
+# setf()
 }

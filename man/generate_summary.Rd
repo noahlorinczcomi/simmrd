@@ -13,6 +13,6 @@ generate_summary(params)
 This function generates simulated summary-level and data given a list of parameters
 }
 \examples{
-generate_summary()
+# generate_summary()
 }
 \keyword{data}

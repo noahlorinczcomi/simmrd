@@ -15,5 +15,5 @@ parthcorr(x, n)
 Helper function
 }
 \examples{
-parthcorr()
+# parthcorr()
 }

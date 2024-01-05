@@ -13,5 +13,5 @@ std(x)
 Helper function
 }
 \examples{
-std()
+std(0:10)
 }

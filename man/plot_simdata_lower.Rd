@@ -13,5 +13,5 @@ plot_simdata_lower(data, params = params, showFstat = TRUE)
 Helper function
 }
 \examples{
-plot_simdata_lower()
+# plot_simdata_lower()
 }

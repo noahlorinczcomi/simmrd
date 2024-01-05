@@ -18,5 +18,5 @@ plot_simdata(
 Helper function
 }
 \examples{
-plot_simdata()
+# plot_simdata()
 }

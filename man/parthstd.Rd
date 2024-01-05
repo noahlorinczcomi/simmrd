@@ -13,5 +13,5 @@ parthstd(bx, by, bxse, byse, maf, nx, ny, MR_standardization_type)
 Helper function
 }
 \examples{
-parthstd()
+# parthstd()
 }

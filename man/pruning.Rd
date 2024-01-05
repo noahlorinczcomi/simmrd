@@ -17,5 +17,5 @@ pruning(jointPs, R, r2)
 Helper function
 }
 \examples{
-pruning()
+# pruning()
 }

@@ -13,6 +13,6 @@ generate_individual(params)
 This function generates simulated individual-level and data given a list of parameters
 }
 \examples{
-generate_individual()
+# generate_individual()
 }
 \keyword{data}

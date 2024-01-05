@@ -13,5 +13,5 @@ pfun(x, y, chpix, uhpix, ...)
 Helper function
 }
 \examples{
-pfun()
+# pfun()
 }
