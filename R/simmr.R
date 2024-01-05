@@ -418,7 +418,7 @@ ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 #' @param x Vector to standardise
 #' @export
 #' @examples
-#' std()
+#' std(0:10)
 std=function(x) (x-mean(x))/stats::sd(x)
 
 #' Helper function
