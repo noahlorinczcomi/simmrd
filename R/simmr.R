@@ -590,9 +590,9 @@ pruning=function(jointPs,R,r2) {
 #' Helper function
 #'
 #' Helper function
-#' @param ix
-#' @param uhpix
-#' @param chpix
+#' @param ix ix
+#' @param uhpix uhpix
+#' @param chpix chpix
 #' @export
 #' @examples
 #' # classIVs()
