@@ -357,7 +357,11 @@ generate_summary=function(params) {
 #' @param number_of_exposures number of exposures
 #' @export
 #' @examples
-#' adj_overlap()
+#' adj_overlap(
+#'   exposure_overlap_proportions = 0.2,
+#'   prop_gwas_overlap_Xs_and_Y = 0.1,
+#'   number_of_exposures = 3
+#' )
 adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,number_of_exposures){
   # limit exposure_overlap_proportions (some values will not be possible given other overlap parameters)
   # this function will very likely only be used with generate_summary() since it may be near impossible
