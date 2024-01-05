@@ -409,7 +409,7 @@ biggwas=function(x,G){
 #' @param rho rho
 #' @export
 #' @examples
-#' ar1()
+#' ar1(2)
 ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 
 #' Helper function
