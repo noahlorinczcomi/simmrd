@@ -401,8 +401,8 @@ biggwas=function(x,G){
 #' Helper function
 #'
 #' Helper function
-#' @param n 
-#' @param rho
+#' @param n The number of rows (and columns) of the matrix
+#' @param rho rho
 #' @export
 #' @examples
 #' ar1()
