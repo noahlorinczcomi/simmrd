@@ -699,7 +699,13 @@ plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
 #' @import ggplot2 
 #' @export
 #' @examples
-#' # plot_simdata()
+#' \dontrun{
+#' # If you used generate_summary(), execute the following
+#' plot_simdata(gwas_data,summary_params) 
+#' 
+#' # If you used generate_individual(), execute the following
+#' plot_simdata(gwas_data,individual_params) 
+#' }
 plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=TRUE) {
   p=ncol(as.matrix(data$bx)) # number of exposures
   # if p>1, plot linear predictor
