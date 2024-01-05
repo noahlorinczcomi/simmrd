@@ -615,7 +615,9 @@ classIVs=function(ix,uhpix,chpix) {
 #' @param fix_Fstatistic_at Value to fix the F-statistic at
 #' @export
 #' @examples
-#' # setf()
+#' \dontrun{
+#' setf()
+#' }
 setf=function(bxunstd,nX,fix_Fstatistic_at) {
   # currently agnostic to LD structure
   # keeps only the weakest IVs
@@ -644,7 +646,9 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
 #' @import ggplot2 
 #' @export
 #' @examples
-#' # plot_simdata_lower()
+#' \dontrun{
+#' plot_simdata_lower()
+#' }
 plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
   for(i in 1:length(data)) assign(names(data)[i],data[[i]])
   nX=params$sample_size_Xs
@@ -749,7 +753,9 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
 #' @import ggplot2 
 #' @export
 #' @examples
-#' # makeBlocks()
+#' \dontrun{
+#' makeBlocks()
+#' }
 makeBlocks=function(LD_causal_SNPs,number_of_causal_SNPs,nblocks=1) {
   m=number_of_causal_SNPs
   mat=matrix(0,m,m)
