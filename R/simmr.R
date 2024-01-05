@@ -197,7 +197,7 @@ generate_individual=function(params){
 #' @export 
 #' @import mvnfast
 #' @examples
-#' generate_summary()
+#' # generate_summary()
 generate_summary=function(params) {
   # assign values in params to local environment
   for(i in 1:length(params)) assign(names(params)[i],params[[i]])
@@ -428,7 +428,7 @@ std=function(x) (x-mean(x))/stats::sd(x)
 #' @param n Number of rows and columns of the matrix
 #' @export
 #' @examples
-#' parthcorr()
+#' # parthcorr()
 parthcorr=function(x,n) {
   if(is.matrix(x)) return(x)
   if(is.numeric(x)) {M=matrix(x,n,n);diag(M)=1;return(M)}
@@ -449,7 +449,7 @@ parthcorr=function(x,n) {
 #' @param uhpix
 #' @export
 #' @examples
-#' pfun()
+#' # pfun()
 pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
@@ -474,7 +474,7 @@ pfun=function(x,y,chpix,uhpix,...) {
 #' @param MR_standardization_type
 #' @export
 #' @examples
-#' parthstd()
+#' # parthstd()
 parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
   if(mst=='none') return(list(bx=bx,bxse=bxse,by=by,byse=byse))
@@ -493,7 +493,7 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
 #' @param r2 upper squared LD r2 threshold for pruning
 #' @export
 #' @examples
-#' pruning()
+#' # pruning()
 pruning=function(jointPs,R,r2) {
   R=as.matrix(R)
   n=nrow(R);
@@ -541,7 +541,7 @@ classIVs=function(ix,uhpix,chpix) {
 #' @param fix_Fstatistic_at
 #' @export
 #' @examples
-#' setf()
+#' # setf()
 setf=function(bxunstd,nX,fix_Fstatistic_at) {
   # currently agnostic to LD structure
   # keeps only the weakest IVs
@@ -570,7 +570,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
 #' @import ggplot2 
 #' @export
 #' @examples
-#' plot_simdata_lower()
+#' # plot_simdata_lower()
 plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
   for(i in 1:length(data)) assign(names(data)[i],data[[i]])
   nX=params$sample_size_Xs
@@ -616,7 +616,7 @@ plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
 #' @import ggplot2 
 #' @export
 #' @examples
-#' plot_simdata()
+#' # plot_simdata()
 plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=TRUE) {
   p=ncol(as.matrix(data$bx)) # number of exposures
   # if p>1, plot linear predictor
@@ -675,7 +675,7 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
 #' @import ggplot2 
 #' @export
 #' @examples
-#' makeBlocks()
+#' # makeBlocks()
 makeBlocks=function(LD_causal_SNPs,number_of_causal_SNPs,nblocks=1) {
   m=number_of_causal_SNPs
   mat=matrix(0,m,m)
