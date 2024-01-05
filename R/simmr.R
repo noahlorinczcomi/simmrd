@@ -6,7 +6,7 @@
 #' @export 
 #' @import mvnfast
 #' @examples
-#' generate_individual()
+#' # generate_individual()
 generate_individual=function(params){
   # assign values in params to local environment
     for(i in 1:length(params)) assign(names(params)[i],params[[i]])
@@ -386,7 +386,7 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 #' @param G genotype matrix 
 #' @export
 #' @examples
-#' biggwas()
+#' # biggwas()
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
@@ -523,7 +523,7 @@ pruning=function(jointPs,R,r2) {
 #' @param chpix
 #' @export
 #' @examples
-#' classIVs()
+#' # classIVs()
 classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
