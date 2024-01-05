@@ -447,7 +447,9 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 #' @param G genotype matrix 
 #' @export
 #' @examples
-#' # biggwas()
+#' \dontrun{
+#' biggwas()
+#' }
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
@@ -489,7 +491,9 @@ std=function(x) (x-mean(x))/stats::sd(x)
 #' @param n Number of rows and columns of the matrix
 #' @export
 #' @examples
-#' # parthcorr()
+#' \dontrun{
+#' parthcorr()
+#' }
 parthcorr=function(x,n) {
   if(is.matrix(x)) return(x)
   if(is.numeric(x)) {M=matrix(x,n,n);diag(M)=1;return(M)}
