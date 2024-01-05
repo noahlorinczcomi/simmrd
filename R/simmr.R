@@ -355,7 +355,6 @@ generate_summary=function(params) {
 #' @param exposure_overlap_proportions scalar or matrix of overlap proportions between exposures GWAS
 #' @param prop_gwas_overlap_Xs_and_Y scalar or vector of overlap proportions between exposures and outcome GWAS
 #' @param number_of_exposures number of exposures
-#' @keywords 
 #' @export
 #' @examples
 #' adj_overlap()
@@ -381,7 +380,6 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 #' Helper function
 #' @param x phenotype vector
 #' @param G genotype matrix 
-#' @keywords 
 #' @export
 #' @examples
 #' biggwas()
@@ -405,7 +403,6 @@ biggwas=function(x,G){
 #' Helper function
 #' @param n 
 #' @param rho
-#' @keywords 
 #' @export
 #' @examples
 #' ar1()
@@ -415,7 +412,6 @@ ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 #'
 #' Helper function
 #' @param x
-#' @keywords 
 #' @export
 #' @examples
 #' std()
@@ -426,7 +422,6 @@ std=function(x) (x-mean(x))/stats::sd(x)
 #' Helper function
 #' @param x 
 #' @param n
-#' @keywords 
 #' @export
 #' @examples
 #' parthcorr()
@@ -448,7 +443,6 @@ parthcorr=function(x,n) {
 #' @param y
 #' @param chpix
 #' @param uhpix
-#' @keywords 
 #' @export
 #' @examples
 #' pfun()
@@ -474,7 +468,6 @@ pfun=function(x,y,chpix,uhpix,...) {
 #' @param nx
 #' @param ny
 #' @param MR_standardization_type
-#' @keywords 
 #' @export
 #' @examples
 #' parthstd()
@@ -494,7 +487,6 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
 #' @param jointPs joint p-degree of freedom chi-square tests for IVs
 #' @param R LD correlation matrix for SNPs
 #' @param r2 upper squared LD r2 threshold for pruning
-#' @keywords 
 #' @export
 #' @examples
 #' pruning()
@@ -525,7 +517,6 @@ pruning=function(jointPs,R,r2) {
 #' @param ix
 #' @param uhpix
 #' @param chpix
-#' @keywords 
 #' @export
 #' @examples
 #' classIVs()
@@ -544,7 +535,6 @@ classIVs=function(ix,uhpix,chpix) {
 #' @param bxunstd
 #' @param nX
 #' @param fix_Fstatistic_at
-#' @keywords 
 #' @export
 #' @examples
 #' setf()
@@ -573,7 +563,6 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
 #'
 #' Helper function
 #' @param data direct output from generate()
-#' @keywords 
 #' @import ggplot2 
 #' @export
 #' @examples
@@ -620,7 +609,6 @@ plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
 #'
 #' Helper function
 #' @param data direct output from generate()
-#' @keywords 
 #' @import ggplot2 
 #' @export
 #' @examples
@@ -680,7 +668,6 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
 #' @param LD_causal_SNPs the LD structure of the causal SNPs
 #' @param number_of_causal_SNPs the total number of causal SNPs
 #' @param nblocks the number of independent LD blocks 
-#' @keywords 
 #' @import ggplot2 
 #' @export
 #' @examples
