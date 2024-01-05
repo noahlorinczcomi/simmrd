@@ -411,7 +411,7 @@ ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 #' Helper function
 #'
 #' Helper function
-#' @param x
+#' @param x Vector to standardise
 #' @export
 #' @examples
 #' std()
