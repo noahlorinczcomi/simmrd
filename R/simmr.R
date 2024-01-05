@@ -642,7 +642,9 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
 #' Helper function
 #'
 #' Helper function
-#' @param data direct output from generate()
+#' @param data direct output from \code{generate()}
+#' @param params Named list of parameters
+#' @param showFstat Logical, default \code{TRUE}
 #' @import ggplot2 
 #' @export
 #' @examples
