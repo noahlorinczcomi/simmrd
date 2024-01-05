@@ -2,6 +2,7 @@
 
 ## General Steps
 The steps to generating and plotting data using the `simmr` R package are the following:
+
 1) Define a named list of parameters which are relevant to the type of simulated data you are generated. Call this list `params`. 
     - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
 2) Give your list of parameters to either `generate_summary(params)` or `generate_individual(params)`.
@@ -84,6 +85,7 @@ If you used `generate_summary()`, execute the following in R:
 plot_simdata(gwas_data,summary_params) 
 ```
 ![](p1.svg)
+
 If you used `generate_individual()`, execute the following in R:
 ```r
 plot_simdata(gwas_data,individual_params) 
