@@ -6,9 +6,18 @@
 \usage{
 classIVs(ix, uhpix, chpix)
 }
+\arguments{
+\item{ix}{ix}
+
+\item{uhpix}{uhpix}
+
+\item{chpix}{chpix}
+}
 \description{
 Helper function
 }
 \examples{
+\dontrun{
 classIVs()
+}
 }

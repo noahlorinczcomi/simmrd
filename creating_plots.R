@@ -1,8 +1,8 @@
 ### example plot of LD between SNPs
-# y=runif(500,-1,1)
+# y=stats::runif(500,-1,1)
 # y=abs(y)
-# y[50:150]=rnorm(101)
-# y[190:230]=rnorm(41,0,2/2.5)
+# y[50:150]=stats::rnorm(101)
+# y[190:230]=stats::rnorm(41,0,2/2.5)
 # y=y^2
 # y=y[1:300]
 # plot(y,pch=23,bg='gray80',cex=1.5)
@@ -53,8 +53,8 @@ source('generate_data.R')
 ################################################################################
 ### plot of UHP,CHP,Valid,Weak IVs
 library(dplyr);library(ggplot2)
-df=data.frame(type=IVtype,lp=bx%*%theta,lpse=median(bxse),y=c(by),lpse=1,yse=c(byse))
-df %>% filter(type=='valid') %>% select(lp,y) %>% as.matrix() %>% cor()
+df=data.frame(type=IVtype,lp=bx%*%theta,lpse=stats::median(bxse),y=c(by),lpse=1,yse=c(byse))
+df %>% filter(type=='valid') %>% select(lp,y) %>% as.matrix() %>% stats::cor()
 ao=lm(y~lp,data=df %>% filter(type=='valid'))
 df %>%
   ggplot(aes(lp,y,fill=type)) +

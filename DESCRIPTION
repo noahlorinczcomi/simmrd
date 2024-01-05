@@ -4,9 +4,22 @@ Version: 0.0.0.9000
 Authors@R:
     person("Noah", "Lorincz-Comi", , "noahlorinczcomi@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0517-2499"))
-Description: This package generates simulation data to use in the evaluation of univariable or multivariable Mendelian Randomization methods. MR scenarios can include uncorrelated horizontal pleiotropy, correlated horizontal pleiotropy, weak instruments, winner's curse, and correlated SNP instruments.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: This package generates simulation data to use in the
+    evaluation of univariable or multivariable Mendelian Randomization
+    methods. MR scenarios can include uncorrelated horizontal pleiotropy,
+    correlated horizontal pleiotropy, weak instruments, winner's curse,
+    and correlated SNP instruments.
+License: MIT + file LICENSE
+URL: https://github.com/noahlorinczcomi/simmr
+BugReports: https://github.com/noahlorinczcomi/simmr/issues
+Imports:
+    ggplot2,
+    ggpubr,
+    mvnfast
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

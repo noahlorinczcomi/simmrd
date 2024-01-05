@@ -2,7 +2,7 @@
 % Please edit documentation in R/simmr.R
 \name{plot_simdata}
 \alias{plot_simdata}
-\title{Helper function}
+\title{Plot simulated data}
 \usage{
 plot_simdata(
   data,
@@ -12,11 +12,23 @@ plot_simdata(
 )
 }
 \arguments{
-\item{data}{direct output from generate()}
+\item{data}{direct output from \code{generate()}}
+
+\item{params}{Named list of parameters}
+
+\item{exposure_specific_plot}{One of \code{'total'}, \code{'joint'}, \code{'conditional'}}
+
+\item{verbose}{Logical, default \code{TRUE}}
 }
 \description{
-Helper function
+Plot simulated data.
 }
 \examples{
-plot_simdata()
+\dontrun{
+# If you used generate_summary(), execute the following
+plot_simdata(gwas_data,summary_params) 
+
+# If you used generate_individual(), execute the following
+plot_simdata(gwas_data,individual_params) 
+}
 }

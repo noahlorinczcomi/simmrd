@@ -1,7 +1,7 @@
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
-  vx=var(x);vx=as.numeric(vx)
+  vx=stats::var(x);vx=as.numeric(vx)
   ug=colMeans(G)
   G=t(t(G)-ug)
   vg=colSums(G^2)
@@ -12,13 +12,13 @@ biggwas=function(x,G){
   A$std=as.vector(sqrt(sdb))
   return(A)
 }
-ar1=function(n,rho=0.5) {x=matrix(rho,n,n)^(toeplitz(1:n)-1);diag(x)=1;x}
-std=function(x) (x-mean(x))/sd(x)
+ar1=function(n,rho=0.5) {x=matrix(rho,n,n)^(stats::toeplitz(1:n)-1);diag(x)=1;x}
+std=function(x) (x-mean(x))/stats::sd(x)
 parthcorr=function(x,n) {
   keys=c('ar','toeplitz','cs')
   boo=sapply(keys,function(h) grepl(h,tolower(x),fixed=TRUE))
   if(boo[1]) return(ar1(n,as.numeric(substr(x,start=5,stop=nchar(x)-1))))
-  if(boo[2]) return(1/toeplitz(1:n))
+  if(boo[2]) return(1/stats::toeplitz(1:n))
   if(boo[3]) {a_=as.numeric(substr(x,start=4,stop=nchar(x)-1)); return(diag(n)+a_-diag(a_,n))}
   return(diag(n))
 }
@@ -26,11 +26,11 @@ pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
   lu=length(uhpix)>0
-  if(lc) points(x[chpix],y[chpix],col='royalblue',pch=16)
-  if(lu) points(x[uhpix],y[uhpix],col='indianred',pch=16)
-  if(lc & !lu) legend('bottomright','CHP',pch=16,col='royalblue')
-  if(!lc & lu) legend('bottomright','UHP',pch=16,col='indianred')
-  if(lc & lu) legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
+  if(lc) graphics::points(x[chpix],y[chpix],col='royalblue',pch=16)
+  if(lu) graphics::points(x[uhpix],y[uhpix],col='indianred',pch=16)
+  if(lc & !lu) graphics::legend('bottomright','CHP',pch=16,col='royalblue')
+  if(!lc & lu) graphics::legend('bottomright','UHP',pch=16,col='indianred')
+  if(lc & lu) graphics::legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
 }
 parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
@@ -61,7 +61,7 @@ classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
   boo=sapply(1:2,function(h) ix %in% ll[[h]])
-  boo=matrix(boo,nr=length(ix))
+  boo=matrix(boo,nrow=length(ix))
   cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
   return(cl)
 }
@@ -75,7 +75,7 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   h2s=a=b=c(); 
   for(i in 1:m) {
     ixi=ord[1:i,1]
-    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,nc=p)))
+    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,ncol=p)))
     a[i]=(nX-i-1)/i
     b[i]=h2s[i]/(1-h2s[i])
   }

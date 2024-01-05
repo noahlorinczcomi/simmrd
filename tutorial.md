@@ -1,12 +1,15 @@
-# General Steps
-The steps to generating and plotting data using the ```simmr``` R package are the following:
-1) Define a named list of parameters which are relevant to the type of simulated data you are generated. Call this list ```params```. 
-    - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
-2) Give your list of parameters to either ```generate_summary(params)``` or ```generate_individual(params)```.
+# How to use the simmr package
 
-# Using ```generate_summary()```
-Below is a named list of parameters to be used with the ```generate_summary()``` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
-```R
+## General Steps
+The steps to generating and plotting data using the `simmr` R package are the following:
+
+1) Define a named list of parameters which are relevant to the type of simulated data you are generated. Call this list `params`. 
+    - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
+2) Give your list of parameters to either `generate_summary(params)` or `generate_individual(params)`.
+
+## Using generate_summary()
+Below is a named list of parameters to be used with the `generate_summary()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
+```r
 summary_params=list(
   sample_size_Xs=30000, # exposure GWAS sample sizes
   sample_size_Y=30000, # outcome GWAS sample size
@@ -35,14 +38,14 @@ summary_params=list(
   N_of_LD_ref=Inf # the sample size of the LD reference panel
 )
 ```
-To generate simulated GWAS summary statistics using these parameters and assign the data to the object ```summary_data```, execute the following in R:
-```R
+To generate simulated GWAS summary statistics using these parameters and assign the data to the object `summary_data`, execute the following in R:
+```r
 gwas_data=generate_summary(summary_params)
 ```
 
-# Using ```generate_individual()```
-Below is a named list of parameters to be used with the ```generate_individual()``` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
-```R
+## Using generate_individual()
+Below is a named list of parameters to be used with the `generate_individual()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
+```r
 individual_params=list(
     sample_size_Xs=5e4, # exposure GWAS sample sizes
     sample_size_Y=5e4, # outcome GWAS sample size
@@ -55,7 +58,7 @@ individual_params=list(
     signs_of_causal_effects=c(1,1), # signs of causal effects
     Y_variance_explained_by_U=0.1, # outcome variance explained by confounder
     number_of_causal_SNPs=200, # number of SNPs causing exposures
-    mafs_of_causal_SNPs=runif(100,0.1,0.5), # minor allele frequency of causal SNPs
+    mafs_of_causal_SNPs=stats::runif(100,0.1,0.5), # minor allele frequency of causal SNPs
     Xs_variance_explained_by_g=0.12, # exposures variance explained by SNPs 
     number_of_UHP_causal_SNPs=30, # number of UHP exposure SNPs
     number_of_CHP_causal_SNPs=10, # number of CHP exposure SNPs
@@ -72,18 +75,19 @@ individual_params=list(
     fix_Fstatistic_at=10 # average across exposures using full MVMR IV set
 )
 ```
-To generate simulated GWAS summary statistics using these parameters and assign the data to the object ```summary_data```, execute the following in R:
-```R
+To generate simulated GWAS summary statistics using these parameters and assign the data to the object `summary_data`, execute the following in R:
+```r
 gwas_data=generate_individual(individual_params)
 ```
-# Plotting simulated data
-If you used ```generate_summary()```, execute the following in R:
-```R
+## Plotting simulated data
+If you used `generate_summary()`, execute the following in R:
+```r
 plot_simdata(gwas_data,summary_params) 
 ```
 ![](p1.svg)
-If you used ```generate_individual()```, execute the following in R:
-```R
-plot_simdata(gwas_data,individual_params) 
+
+If you used `generate_individual()`, execute the following in R:
+```r
+plot_simdata(gwas_data,individual_params)
 ```
 ![](p2.svg)

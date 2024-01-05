@@ -21,5 +21,9 @@ adj_overlap(
 Helper function
 }
 \examples{
-adj_overlap()
+adj_overlap(
+  exposure_overlap_proportions = 0.2,
+  prop_gwas_overlap_Xs_and_Y = 0.1,
+  number_of_exposures = 3
+)
 }

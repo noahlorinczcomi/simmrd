@@ -7,11 +7,13 @@
 ar1(n, rho = 0.5)
 }
 \arguments{
-\item{n}{}
+\item{n}{The number of rows (and columns) of the matrix}
+
+\item{rho}{rho}
 }
 \description{
 Helper function
 }
 \examples{
-ar1()
+ar1(2)
 }

@@ -7,11 +7,27 @@
 parthstd(bx, by, bxse, byse, maf, nx, ny, MR_standardization_type)
 }
 \arguments{
-\item{bx}{}
+\item{bx}{bx}
+
+\item{by}{by}
+
+\item{bxse}{bxse}
+
+\item{byse}{byse}
+
+\item{maf}{Minor allele frequency}
+
+\item{nx}{nx}
+
+\item{ny}{ny}
+
+\item{MR_standardization_type}{Standardization type}
 }
 \description{
 Helper function
 }
 \examples{
+\dontrun{
 parthstd()
+}
 }

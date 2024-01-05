@@ -4,22 +4,22 @@ n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
 nall=sample_size_Y+sample_size_Xs-n0_xy
 indY=1:sample_size_Y
 indX=(nall-sample_size_Xs+1):nall
-G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
-G=matrix(G,nr=nall,nc=number_of_causal_SNPs)
+G=stats::rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
+G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
 G=apply(G,2,std)
 # order will go UHP, CHP, valid, weak
 ### CHP IVs
 gammaC=rep(0,number_of_causal_SNPs)
 if(number_of_CHP_causal_SNPs>0) {
   chpix=1:number_of_CHP_causal_SNPs
-  gammaC_=runif(number_of_CHP_causal_SNPs,-1/2,1/2);
+  gammaC_=stats::runif(number_of_CHP_causal_SNPs,-1/2,1/2);
   adj=U_variance_explained_by_CHP/sum(gammaC_^2)
   gammaC_=sqrt(adj)*gammaC_; gammaC[chpix]=-gammaC_
 } else {
   chpix=c()
 }
 ### setting U
-eU=rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
+eU=stats::rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
 U=G%*%gammaC+eU
 ### setting X
 CorrXX=parthcorr(phenotypic_correlation_Xs,n=number_of_exposures)
@@ -28,13 +28,13 @@ LD=parthcorr(LD_causal_SNPs,number_of_causal_SNPs)
 K=kronecker(GenCorrXX,LD)
 Thsq=chol(solve(LD))
 B=rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
-B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
 if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
 th=chol(solve(GenCorrXX))
-cop=pnorm(B%*%th)
-#cor(cop)
+cop=stats::pnorm(B%*%th)
+#stats::cor(cop)
 cop=cop%*%chol(GenCorrXX)
-#list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+#list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
 # rescale to match heritability
 adj=Xs_variance_explained_by_g/colSums(B^2)
 for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -44,7 +44,7 @@ sdeX=diag(1-Xs_variance_explained_by_g-pix^2,number_of_exposures)
 sdeX=sqrt(sdeX)
 SigmaEX=sdeX%*%CorrXX%*%sdeX
 eX=rmvn(nall,rep(0,number_of_exposures),SigmaEX)
-X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
+X=G%*%B+matrix(pix*U,nrow=nall,ncol=number_of_exposures)+eX
 ### model for Y
 vXY=Y_variance_explained_by_Xs
 #theta=vXY*signs_of_causal_effects
@@ -62,16 +62,16 @@ if(number_of_UHP_causal_SNPs>0 & length(chpix)>0) {
   uhpix=c()
 }
 if(number_of_UHP_causal_SNPs>0) {
-  gammaU_=runif(number_of_UHP_causal_SNPs,-1,1);
+  gammaU_=stats::runif(number_of_UHP_causal_SNPs,-1,1);
   adj=Y_variance_explained_by_UHP/sum(gammaU_^2)
   gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
 }
 vUHPY=Y_variance_explained_by_UHP
-eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
+eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
 etaX=X%*%theta
 #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
 Y=etaX+piy*U+G%*%gammaU+eY
-RhoXY=cor(cbind(Y,X))
+RhoXY=stats::cor(cbind(Y,X))
 Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
 p=ncol(B);nY=length(indY); nX=sample_size_Xs
 nn=sqrt(c(nY,rep(nX,p)));nn=nn%*%t(nn) # for RhoME (correlations between measurement errors)
@@ -80,7 +80,7 @@ RhoME=no/nn*RhoXY
 ### GWAS
 gwas_y=biggwas(Y[indY],G[indY,]) # indY created near the top
 by=gwas_y$est; byse=gwas_y$std
-bx=bxse=matrix(nr=number_of_causal_SNPs,nc=number_of_exposures)
+bx=bxse=matrix(nrow=number_of_causal_SNPs,ncol=number_of_exposures)
 for(j in 1:ncol(bx)) {
   fit=biggwas(X[indX,j],G[indX,])
   bx[,j]=fit$est
@@ -103,13 +103,13 @@ if(st=='win') {
       Th=diag(bxse[j,])%*%Ruu%*%diag(bxse[j,])
       Th=solve(Th)
       v=t(bx[j,])%*%Th%*%bx[j,]
-      pj=1-pchisq(v,p); pjs[j]=pj
+      pj=1-stats::pchisq(v,p); pjs[j]=pj
       if(pj<IV_Pvalue_threshold) keep=c(keep,j)
     }
     # if user wants the union set of significant SNPs as IVs in MVMR
   } else {
     z=bx/bxse
-    keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
+    keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
   }
   ix=pruning(pjs[keep],LD[keep,keep],LD_pruning_r2)
   ix=keep[ix]
@@ -129,7 +129,7 @@ bx_unstd=bx_unstd[ix,]; bxse_unstd=bxse_unstd[ix,]
 IVtype=classIVs(ix,uhpix,chpix)
 el=ls()
 ### did user want to imprecisely estimate LD among the IVs?
-if(N_of_LD_ref<Inf) {LD=rWishart(1,N_of_LD_ref,LD)[,,1]; LD=cov2cor(LD)}
+if(N_of_LD_ref<Inf) {LD=stats::rWishart(1,N_of_LD_ref,LD)[,,1]; LD=stats::cov2cor(LD)}
 # verify weak IV set
 # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
 # h2=colSums(bx_unstd^2)

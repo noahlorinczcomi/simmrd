@@ -6,7 +6,38 @@
 #' @export 
 #' @import mvnfast
 #' @examples
-#' generate_individual()
+#' \dontrun{
+#' individual_params <-
+#'   list(
+#'     sample_size_Xs = 5e4, # exposure GWAS sample sizes
+#'     sample_size_Y = 5e4, # outcome GWAS sample size
+#'     prop_gwas_overlap_Xs_and_Y = 0.5, # proportion of exposure and outcome GWAS overlap
+#'     number_of_exposures = 2, # 4 number of exposures
+#'     phenotypic_correlation_Xs = 0.2, # phenotypic correlation between exposures
+#'     genetic_correlation_Xs = 0, # genetic correlation between exposures
+#'     Xs_variance_explained_by_U = 1/4 - 0.12, # exposures variance explained by confounder
+#'     Y_variance_explained_by_Xs = c(0, 0.5), # outcome variance explained by exposures
+#'     signs_of_causal_effects = c(1, 1), # signs of causal effects
+#'     Y_variance_explained_by_U = 0.1, # outcome variance explained by confounder
+#'     number_of_causal_SNPs = 200, # number of SNPs causing exposures
+#'     mafs_of_causal_SNPs = stats::runif(100, 0.1, 0.5), # minor allele frequency of causal SNPs
+#'     Xs_variance_explained_by_g = 0.12, # exposures variance explained by SNPs 
+#'     number_of_UHP_causal_SNPs = 30, # number of UHP exposure SNPs
+#'     number_of_CHP_causal_SNPs = 10, # number of CHP exposure SNPs
+#'     Y_variance_explained_by_UHP = 0.05, # outcome variance explained by UHP SNPs
+#'     U_variance_explained_by_CHP = 0.05, # outcome variance explained by CHP SNPs
+#'     LD_causal_SNPs = 'I', # independent causal exposure SNPs
+#'     number_of_LD_blocks = 1, # number of independent LD blocks
+#'     MR_standardization = 'Z', # standardization of GWAS summary statistics 
+#'     simtype = 'weak', # simulation performed using weak instruments
+#'     MVMR_IV_selection_type = 'joint', # P-values for IV selection based on joint test for exposures
+#'     IV_Pvalue_threshold = 1, # P-value threshold for candidate IVs
+#'     LD_pruning_r2 = 1, # upper boundary of squared LD correlation
+#'     N_of_LD_ref = Inf, # size of the LD reference panel
+#'     fix_Fstatistic_at = 10 # average across exposures using full MVMR IV set
+#'   )
+#' gwas_data <- generate_individual(individual_params)
+#' }
 generate_individual=function(params){
   # assign values in params to local environment
     for(i in 1:length(params)) assign(names(params)[i],params[[i]])
@@ -33,22 +64,22 @@ generate_individual=function(params){
     indY=1:sample_size_Y
     indX=(nall-sample_size_Xs+1):nall
     mafs_of_causal_SNPs=0.3 
-    G=rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
-    G=matrix(G,nr=nall,nc=number_of_causal_SNPs)
+    G=stats::rbinom(number_of_causal_SNPs*nall,2,mafs_of_causal_SNPs) # assuming independence for now
+    G=matrix(G,nrow=nall,ncol=number_of_causal_SNPs)
     G=apply(G,2,std)
     # order will go UHP, CHP, valid, weak
     ### CHP IVs
     gammaC=rep(0,number_of_causal_SNPs)
     if(number_of_CHP_causal_SNPs>0) {
     chpix=1:number_of_CHP_causal_SNPs
-    gammaC_=runif(number_of_CHP_causal_SNPs,-1/2,1/2);
+    gammaC_=stats::runif(number_of_CHP_causal_SNPs,-1/2,1/2);
     adj=U_variance_explained_by_CHP/sum(gammaC_^2)
     gammaC_=sqrt(adj)*gammaC_; gammaC[chpix]=-gammaC_
     } else {
     chpix=c()
     }
     ### setting U
-    eU=rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
+    eU=stats::rnorm(nall,0,sqrt(1-U_variance_explained_by_CHP))
     U=G%*%gammaC+eU
     ### setting X
     CorrXX=parthcorr(phenotypic_correlation_Xs,n=number_of_exposures)
@@ -58,13 +89,13 @@ generate_individual=function(params){
     K=kronecker(GenCorrXX,LD)
     Thsq=chol(solve(LD))
     B=mvnfast::rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
-    B=matrix(B,nr=number_of_causal_SNPs,nc=number_of_exposures)
+    B=matrix(B,nrow=number_of_causal_SNPs,ncol=number_of_exposures)
     if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
     th=chol(solve(GenCorrXX))
-    cop=pnorm(B%*%th)
-    #cor(cop)
+    cop=stats::pnorm(B%*%th)
+    #stats::cor(cop)
     cop=cop%*%chol(GenCorrXX)
-    #list(gencor=round(GenCorrXX,2),cop=round(cor(cop),2),corB=round(cor(B),2))
+    #list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
     # rescale to match heritability
     adj=Xs_variance_explained_by_g/colSums(B^2)
     for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -74,7 +105,7 @@ generate_individual=function(params){
     sdeX=sqrt(sdeX)
     SigmaEX=sdeX%*%CorrXX%*%sdeX
     eX=mvnfast::rmvn(nall,rep(0,number_of_exposures),SigmaEX)
-    X=G%*%B+matrix(pix*U,nr=nall,nc=number_of_exposures)+eX
+    X=G%*%B+matrix(pix*U,nrow=nall,ncol=number_of_exposures)+eX
     ### model for Y
     vXY=Y_variance_explained_by_Xs
     #theta=vXY*signs_of_causal_effects
@@ -93,7 +124,7 @@ generate_individual=function(params){
     uhpix=c()
     }
     if(number_of_UHP_causal_SNPs>0) {
-    gammaU_=runif(number_of_UHP_causal_SNPs,-1,1);
+    gammaU_=stats::runif(number_of_UHP_causal_SNPs,-1,1);
     adj=Y_variance_explained_by_UHP/sum(gammaU_^2)
     gammaU_=sqrt(adj)*gammaU_; gammaU[uhpix]=gammaU_
     }
@@ -101,13 +132,13 @@ generate_individual=function(params){
     if(length(uhpix)>0) IVtype[uhpix]='UHP'
     if(length(chpix)>0) IVtype[chpix]='CHP'
     vUHPY=Y_variance_explained_by_UHP
-    eY=rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
+    eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
     etaX=X%*%theta
     #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
     Y=etaX+piy*U+G%*%gammaU+eY
-    cyx=c(cov(X,Y))
-    rho2=t(cyx)%*%solve(cov(X))%*%cyx
-    RhoXY=cor(cbind(Y,X))
+    cyx=c(stats::cov(X,Y))
+    rho2=t(cyx)%*%solve(stats::cov(X))%*%cyx
+    RhoXY=stats::cor(cbind(Y,X))
     Sinv=solve(RhoXY[2:ncol(RhoXY),2:ncol(RhoXY)])
     p=ncol(B);nY=length(indY); nX=sample_size_Xs
     nn=sqrt(c(nY,rep(nX,p)));nn=nn%*%t(nn) # for RhoME (correlations between measurement errors)
@@ -116,7 +147,7 @@ generate_individual=function(params){
     ### GWAS
     gwas_y=biggwas(Y[indY],G[indY,]) # indY created near the top
     by=gwas_y$est; byse=gwas_y$std
-    bx=bxse=matrix(nr=number_of_causal_SNPs,nc=number_of_exposures)
+    bx=bxse=matrix(nrow=number_of_causal_SNPs,ncol=number_of_exposures)
     for(j in 1:ncol(bx)) {
     fit=biggwas(X[indX,j],G[indX,])
     bx[,j]=fit$est
@@ -134,8 +165,8 @@ generate_individual=function(params){
     ### did user want to imprecisely estimate LD among the IVs?
     R=LD
     R0=R
-    if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
-    if(length(c(R))>1) R=cov2cor(R) else R=R/N_of_LD_ref
+    if(N_of_LD_ref<Inf) R=stats::rWishart(1,N_of_LD_ref,R)[,,1]
+    if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
     ### any P-value pruning?
     st=tolower(substr(simtype,start=1,stop=3))
     if(st=='win') {
@@ -148,13 +179,13 @@ generate_individual=function(params){
           Th=diag(D_,length(D_))%*%as.matrix(Ruu)%*%diag(D_,length(D_))
           Th=solve(Th)
           v=t(bx[j,])%*%Th%*%bx[j,]
-          pj=1-pchisq(v,p); pjs[j]=pj
+          pj=1-stats::pchisq(v,p); pjs[j]=pj
           if(pj<IV_Pvalue_threshold) keep=c(keep,j)
         }
         # if user wants the union set of significant SNPs as IVs in MVMR
     } else {
         z=bx/bxse
-        keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
+        keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
     }
       ix=pruning(pjs[keep],LD[keep,keep],LD_pruning_r2)
       ix=keep[ix]
@@ -197,7 +228,37 @@ generate_individual=function(params){
 #' @export 
 #' @import mvnfast
 #' @examples
-#' generate_summary()
+#' \dontrun{
+#' summary_params <-
+#'   list(
+#'     sample_size_Xs = 30000, # exposure GWAS sample sizes
+#'     sample_size_Y = 30000, # outcome GWAS sample size
+#'     prop_gwas_overlap_Xs_and_Y = 1, # proportion of exposures' and outcome GWAS overlap
+#'     number_of_exposures = 3, # number of exposures
+#'     number_of_causal_SNPs = 100, # number of SNPs causing each exposure
+#'     number_of_UHP_causal_SNPs = 0, # number of UHP causal SNPs
+#'     number_of_CHP_causal_SNPs = 20, # number of CHP causal SNPs
+#'     ratio_of_UHP_variance = 0.15, # ratio of UHP variance to valid IV variance
+#'     ratio_of_CHP_variance = 0.25, # ratio of CHP variance to valid IV variance
+#'     CHP_correlation = -0.5, # correlation between CHP and valid IV effect sizes
+#'     simtype = 'winners', # performs IV selection based on P-value
+#'     fix_Fstatistic_at = 10, # ignored because simtype='winners'
+#'     prop_gwas_overlap_Xs = 1, # overlap of exposures' GWAS
+#'     phenotypic_correlation_Xs = 0.3, # phenotypic correlations between exposures
+#'     genetic_correlation_Xs = 0.15,  # genetic correlation between exposures
+#'     phenotypic_correlations_Xs_and_Y = 0.3, # phenotypic correlations b/w exposures and outcome
+#'     true_causal_effects = 0.3, # true causal effect sizes
+#'     Xs_variance_explained_by_g = 0.10, # exposure variance explained by SNPs
+#'     LD_causal_SNPs = 'ar1(0.5)', # LD between causal exposure SNPs
+#'     number_of_LD_blocks = 3, # number of independent LD blocks
+#'     MR_standardization = 'none', # does not standardize GWAS estimates
+#'     MVMR_IV_selection_type = 'union', # SNPs associated with >0 exposures are candidate IVs
+#'     IV_Pvalue_threshold = 5e-8, # only SNPs with P<this threshold are candidate IVs
+#'     LD_pruning_r2 = 1, # the upper LD r2 pruning threshold for candidate IVs
+#'     N_of_LD_ref = Inf # the sample size of the LD reference panel
+#'   )
+#' gwas_data <- generate_summary(summary_params)
+#' }
 generate_summary=function(params) {
   # assign values in params to local environment
   for(i in 1:length(params)) assign(names(params)[i],params[[i]])
@@ -251,27 +312,27 @@ generate_summary=function(params) {
   # CHP
   IVtype=rep('valid',number_of_causal_SNPs)
   gammaU=gammaC=rep(0,number_of_causal_SNPs)
-  lp_var=var(B%*%c(true_causal_effects)+as.matrix(wu[,-1])%*%c(true_causal_effects)+wu[,1])
+  lp_var=stats::var(B%*%c(true_causal_effects)+as.matrix(wu[,-1])%*%c(true_causal_effects)+wu[,1])
   if(ratio_of_CHP_variance>0 & number_of_CHP_causal_SNPs>0) {
     ix=1:number_of_CHP_causal_SNPs
     IVtype[ix]='CHP'
-    gammaC[ix]=as.matrix(B[ix,])%*%c(true_causal_effects)*(-1+CHP_correlation)+rnorm(length(ix),0,sqrt(ratio_of_CHP_variance*lp_var))
+    gammaC[ix]=as.matrix(B[ix,])%*%c(true_causal_effects)*(-1+CHP_correlation)+stats::rnorm(length(ix),0,sqrt(ratio_of_CHP_variance*lp_var))
   }
   # UHP
   if(ratio_of_UHP_variance>0 & number_of_UHP_causal_SNPs>0) {
     ix0=match('valid',IVtype)+1
     ix=ix0:(ix0+number_of_UHP_causal_SNPs-1)
     IVtype[ix]='UHP'
-    gammaU[ix]=rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))
+    gammaU[ix]=stats::rnorm(length(ix),0,sqrt(ratio_of_UHP_variance*lp_var))
   }
   # Bhat, ahat
   valid_ix=which(IVtype=='valid')
   a=a+gammaU+gammaC
   by=a+wu[,1]
   bx=B+wu[,-1]
-  bxse=bx*0; for(i in 1:p) bxse[,i]=rchisq(number_of_causal_SNPs,Nxx[i]-1)/(Nxx[i]-1)/Nxx[i] # sigma2=1/Nxx[i]
+  bxse=bx*0; for(i in 1:p) bxse[,i]=stats::rchisq(number_of_causal_SNPs,Nxx[i]-1)/(Nxx[i]-1)/Nxx[i] # sigma2=1/Nxx[i]
   bxse=sqrt(bxse)
-  byse=rchisq(number_of_causal_SNPs,sample_size_Y-1)/(sample_size_Y-1)/sample_size_Y
+  byse=stats::rchisq(number_of_causal_SNPs,sample_size_Y-1)/(sample_size_Y-1)/sample_size_Y
   byse=sqrt(byse)
   # cols=rep('black',number_of_causal_SNPs)
   # cols[IVtype=='UHP']='red'
@@ -289,11 +350,11 @@ generate_summary=function(params) {
   byunstd_all=by
   byseunstd_all=byse
   ### measurement error correlation matrix
-  RhoME=cov2cor(Pwu)
+  RhoME=stats::cov2cor(Pwu)
   ### did user want to imprecisely estimate LD among the IVs?
   R0=R
-  if(N_of_LD_ref<Inf) R=rWishart(1,N_of_LD_ref,R)[,,1]
-  if(length(c(R))>1) R=cov2cor(R) else R=R/N_of_LD_ref
+  if(N_of_LD_ref<Inf) R=stats::rWishart(1,N_of_LD_ref,R)[,,1]
+  if(length(c(R))>1) R=stats::cov2cor(R) else R=R/N_of_LD_ref
   ### any P-value pruning?
   st=tolower(substr(simtype,start=1,stop=3))
   if(st=='win') {
@@ -306,14 +367,14 @@ generate_summary=function(params) {
         Th=diag(D_,length(D_))%*%as.matrix(Ruu)%*%diag(D_,length(D_))
         Th=solve(Th)
         v=t(bx[j,])%*%Th%*%bx[j,]
-        pj=pchisq(v,p,lower.tail=FALSE); pjs[j]=pj
+        pj=stats::pchisq(v,p,lower.tail=FALSE); pjs[j]=pj
         if(pj<IV_Pvalue_threshold) keep=c(keep,j)
       }
       # if user wants the union set of significant SNPs as IVs in MVMR
     } else {
       z=bx/bxse
-      keep=which(apply(z^2,1,function(h) any(h>qchisq(1-IV_Pvalue_threshold,1))))
-      pjs=apply(z^2,1,function(h)pchisq(h,1,lower.tail=FALSE))
+      keep=which(apply(z^2,1,function(h) any(h>stats::qchisq(1-IV_Pvalue_threshold,1))))
+      pjs=apply(z^2,1,function(h)stats::pchisq(h,1,lower.tail=FALSE))
     }
     if(length(keep)==0) stop('no IVs were selected given your selection criteria')
     ix=pruning(pjs[keep],R[keep,keep],LD_pruning_r2)
@@ -355,10 +416,13 @@ generate_summary=function(params) {
 #' @param exposure_overlap_proportions scalar or matrix of overlap proportions between exposures GWAS
 #' @param prop_gwas_overlap_Xs_and_Y scalar or vector of overlap proportions between exposures and outcome GWAS
 #' @param number_of_exposures number of exposures
-#' @keywords 
 #' @export
 #' @examples
-#' adj_overlap()
+#' adj_overlap(
+#'   exposure_overlap_proportions = 0.2,
+#'   prop_gwas_overlap_Xs_and_Y = 0.1,
+#'   number_of_exposures = 3
+#' )
 adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,number_of_exposures){
   # limit exposure_overlap_proportions (some values will not be possible given other overlap parameters)
   # this function will very likely only be used with generate_summary() since it may be near impossible
@@ -381,14 +445,15 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 #' Helper function
 #' @param x phenotype vector
 #' @param G genotype matrix 
-#' @keywords 
 #' @export
 #' @examples
+#' \dontrun{
 #' biggwas()
+#' }
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
-  vx=var(x);vx=as.numeric(vx)
+  vx=stats::var(x);vx=as.numeric(vx)
   ug=colMeans(G)
   G=t(t(G)-ug)
   vg=colSums(G^2)
@@ -403,40 +468,39 @@ biggwas=function(x,G){
 #' Helper function
 #'
 #' Helper function
-#' @param n 
-#' @param rho
-#' @keywords 
+#' @param n The number of rows (and columns) of the matrix
+#' @param rho rho
 #' @export
 #' @examples
-#' ar1()
-ar1=function(n,rho=0.5) rho^toeplitz(0:(n-1))
+#' ar1(2)
+ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 
 #' Helper function
 #'
 #' Helper function
-#' @param x
-#' @keywords 
+#' @param x Vector to standardise
 #' @export
 #' @examples
-#' std()
-std=function(x) (x-mean(x))/sd(x)
+#' std(0:10)
+std=function(x) (x-mean(x))/stats::sd(x)
 
 #' Helper function
 #'
 #' Helper function
-#' @param x 
-#' @param n
-#' @keywords 
+#' @param x Matrix or numeric value
+#' @param n Number of rows and columns of the matrix
 #' @export
 #' @examples
+#' \dontrun{
 #' parthcorr()
+#' }
 parthcorr=function(x,n) {
   if(is.matrix(x)) return(x)
   if(is.numeric(x)) {M=matrix(x,n,n);diag(M)=1;return(M)}
   keys=c('ar','toeplitz','cs')
   boo=sapply(keys,function(h) grepl(h,tolower(x),fixed=TRUE))
   if(boo[1]) return(ar1(n,as.numeric(substr(x,start=5,stop=nchar(x)-1))))
-  if(boo[2]) return(1/toeplitz(1:n))
+  if(boo[2]) return(1/stats::toeplitz(1:n))
   if(boo[3]) {a_=as.numeric(substr(x,start=4,stop=nchar(x)-1)); return(diag(n)+a_-diag(a_,n))}
   return(diag(n))
 }
@@ -444,40 +508,43 @@ parthcorr=function(x,n) {
 #' Helper function
 #'
 #' Helper function
-#' @param x 
-#' @param y
-#' @param chpix
-#' @param uhpix
-#' @keywords 
+#' @param x x
+#' @param y y
+#' @param chpix chipx
+#' @param uhpix uhpix
+#' @param ... Additional arguments passed to \code{plot()}
 #' @export
 #' @examples
+#' \dontrun{
 #' pfun()
+#' }
 pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
   lu=length(uhpix)>0
-  if(lc) points(x[chpix],y[chpix],col='royalblue',pch=16)
-  if(lu) points(x[uhpix],y[uhpix],col='indianred',pch=16)
-  if(lc & !lu) legend('bottomright','CHP',pch=16,col='royalblue')
-  if(!lc & lu) legend('bottomright','UHP',pch=16,col='indianred')
-  if(lc & lu) legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
+  if(lc) graphics::points(x[chpix],y[chpix],col='royalblue',pch=16)
+  if(lu) graphics::points(x[uhpix],y[uhpix],col='indianred',pch=16)
+  if(lc & !lu) graphics::legend('bottomright','CHP',pch=16,col='royalblue')
+  if(!lc & lu) graphics::legend('bottomright','UHP',pch=16,col='indianred')
+  if(lc & lu) graphics::legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
 }
 
 #' Helper function
 #'
 #' Helper function
-#' @param bx 
-#' @param by
-#' @param bxse
-#' @param byse
-#' @param maf
-#' @param nx
-#' @param ny
-#' @param MR_standardization_type
-#' @keywords 
+#' @param bx bx
+#' @param by by
+#' @param bxse bxse
+#' @param byse byse
+#' @param maf Minor allele frequency
+#' @param nx nx
+#' @param ny ny
+#' @param MR_standardization_type Standardization type
 #' @export
 #' @examples
+#' \dontrun{
 #' parthstd()
+#' }
 parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
   if(mst=='none') return(list(bx=bx,bxse=bxse,by=by,byse=byse))
@@ -490,20 +557,21 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
 
 #' Pruning SNPs
 #'
-#' Helper function
+#' Pruning SNPs
 #' @param jointPs joint p-degree of freedom chi-square tests for IVs
 #' @param R LD correlation matrix for SNPs
 #' @param r2 upper squared LD r2 threshold for pruning
-#' @keywords 
 #' @export
 #' @examples
+#' \dontrun{
 #' pruning()
+#' }
 pruning=function(jointPs,R,r2) {
   R=as.matrix(R)
   n=nrow(R);
   ps=cbind(1:n,jointPs)
   ps=ps[order(ps[,2]),]
-  ps=matrix(ps,nr=n,nc=2)
+  ps=matrix(ps,nrow=n,ncol=2)
   ord=ps[,1]; ps=ps[,2]
   R0=R[ord,ord]; 
   R0=as.matrix(R0)
@@ -522,18 +590,19 @@ pruning=function(jointPs,R,r2) {
 #' Helper function
 #'
 #' Helper function
-#' @param ix
-#' @param uhpix
-#' @param chpix
-#' @keywords 
+#' @param ix ix
+#' @param uhpix uhpix
+#' @param chpix chpix
 #' @export
 #' @examples
+#' \dontrun{
 #' classIVs()
+#' }
 classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
   boo=sapply(1:2,function(h) ix %in% ll[[h]])
-  boo=matrix(boo,nr=length(ix))
+  boo=matrix(boo,nrow=length(ix))
   cl=c();for(i in 1:nrow(boo)) {toa=keys[which(boo[i,])];cl[i]=ifelse(length(toa)==0,'valid',toa)}
   return(cl)
 }
@@ -541,13 +610,14 @@ classIVs=function(ix,uhpix,chpix) {
 #' Helper function
 #'
 #' Helper function
-#' @param bxunstd
-#' @param nX
-#' @param fix_Fstatistic_at
-#' @keywords 
+#' @param bxunstd bxunstd
+#' @param nX nX
+#' @param fix_Fstatistic_at Value to fix the F-statistic at
 #' @export
 #' @examples
+#' \dontrun{
 #' setf()
+#' }
 setf=function(bxunstd,nX,fix_Fstatistic_at) {
   # currently agnostic to LD structure
   # keeps only the weakest IVs
@@ -559,8 +629,8 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
   h2s=a=b=c(); 
   for(i in 1:m) {
     ixi=ord[1:i,1]
-    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,nc=p)))
-    a[i]=(median(nX)-i-1)/i
+    h2s[i]=mean(colSums(matrix(bxunstd[ixi,]^2,ncol=p)))
+    a[i]=(stats::median(nX)-i-1)/i
     b[i]=h2s[i]/(1-h2s[i])
   }
   fs=a*b
@@ -572,12 +642,15 @@ setf=function(bxunstd,nX,fix_Fstatistic_at) {
 #' Helper function
 #'
 #' Helper function
-#' @param data direct output from generate()
-#' @keywords 
+#' @param data direct output from \code{generate()}
+#' @param params Named list of parameters
+#' @param showFstat Logical, default \code{TRUE}
 #' @import ggplot2 
 #' @export
 #' @examples
+#' \dontrun{
 #' plot_simdata_lower()
+#' }
 plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
   for(i in 1:length(data)) assign(names(data)[i],data[[i]])
   nX=params$sample_size_Xs
@@ -616,15 +689,23 @@ plot_simdata_lower=function(data,params=params,showFstat=TRUE) {
   p
 }
 
-#' Helper function
+#' Plot simulated data
 #'
-#' Helper function
-#' @param data direct output from generate()
-#' @keywords 
+#' Plot simulated data.
+#' @param data direct output from \code{generate()}
+#' @param params Named list of parameters
+#' @param exposure_specific_plot One of \code{'total'}, \code{'joint'}, \code{'conditional'}
+#' @param verbose Logical, default \code{TRUE}
 #' @import ggplot2 
 #' @export
 #' @examples
-#' plot_simdata()
+#' \dontrun{
+#' # If you used generate_summary(), execute the following
+#' plot_simdata(gwas_data,summary_params) 
+#' 
+#' # If you used generate_individual(), execute the following
+#' plot_simdata(gwas_data,individual_params) 
+#' }
 plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=TRUE) {
   p=ncol(as.matrix(data$bx)) # number of exposures
   # if p>1, plot linear predictor
@@ -642,7 +723,7 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
         total=TRUE
         bxi=data0$bx[,i]
         bxsei=data0$bxse[,i]
-        ixi=which((bxi/bxsei)^2>qchisq(1-params$IV_Pvalue_threshold,1))
+        ixi=which((bxi/bxsei)^2>stats::qchisq(1-params$IV_Pvalue_threshold,1))
         if(length(ixi)==0) {
           if(verbose) cat('Exposure ', i, ' has no significant IVs\n',sep='')
           doskip=TRUE
@@ -676,15 +757,16 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
 
 #' A function to make LD blocks
 #'
-#' Helper function
+#' Helper function to make LD blocks
 #' @param LD_causal_SNPs the LD structure of the causal SNPs
 #' @param number_of_causal_SNPs the total number of causal SNPs
 #' @param nblocks the number of independent LD blocks 
-#' @keywords 
 #' @import ggplot2 
 #' @export
 #' @examples
+#' \dontrun{
 #' makeBlocks()
+#' }
 makeBlocks=function(LD_causal_SNPs,number_of_causal_SNPs,nblocks=1) {
   m=number_of_causal_SNPs
   mat=matrix(0,m,m)
