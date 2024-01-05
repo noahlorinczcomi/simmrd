@@ -542,7 +542,9 @@ pfun=function(x,y,chpix,uhpix,...) {
 #' @param MR_standardization_type Standardization type
 #' @export
 #' @examples
-#' # parthstd()
+#' \dontrun{
+#' parthstd()
+#' }
 parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
   if(mst=='none') return(list(bx=bx,bxse=bxse,by=by,byse=byse))
