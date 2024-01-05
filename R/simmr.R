@@ -420,8 +420,8 @@ std=function(x) (x-mean(x))/stats::sd(x)
 #' Helper function
 #'
 #' Helper function
-#' @param x 
-#' @param n
+#' @param x Matrix or numeric value
+#' @param n Number of rows and columns of the matrix
 #' @export
 #' @examples
 #' parthcorr()
