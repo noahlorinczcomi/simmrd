@@ -10,5 +10,5 @@ classIVs(ix, uhpix, chpix)
 Helper function
 }
 \examples{
-classIVs()
+# classIVs()
 }

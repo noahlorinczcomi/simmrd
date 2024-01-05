@@ -15,5 +15,5 @@ biggwas(x, G)
 Helper function
 }
 \examples{
-biggwas()
+# biggwas()
 }
