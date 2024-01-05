@@ -88,6 +88,6 @@ plot_simdata(gwas_data,summary_params)
 
 If you used `generate_individual()`, execute the following in R:
 ```r
-plot_simdata(gwas_data,individual_params) 
+plot_simdata(gwas_data,individual_params)
 ```
 ![](p2.svg)
