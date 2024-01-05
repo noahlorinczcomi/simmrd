@@ -508,10 +508,11 @@ parthcorr=function(x,n) {
 #' Helper function
 #'
 #' Helper function
-#' @param x 
-#' @param y
-#' @param chpix
-#' @param uhpix
+#' @param x x
+#' @param y y
+#' @param chpix chipx
+#' @param uhpix uhpix
+#' @param ... Additional arguments passed to \code{plot()}
 #' @export
 #' @examples
 #' # pfun()
