@@ -563,7 +563,9 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
 #' @param r2 upper squared LD r2 threshold for pruning
 #' @export
 #' @examples
-#' # pruning()
+#' \dontrun{
+#' pruning()
+#' }
 pruning=function(jointPs,R,r2) {
   R=as.matrix(R)
   n=nrow(R);
