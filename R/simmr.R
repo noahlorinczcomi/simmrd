@@ -757,7 +757,7 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
 
 #' A function to make LD blocks
 #'
-#' Helper function
+#' Helper function to make LD blocks
 #' @param LD_causal_SNPs the LD structure of the causal SNPs
 #' @param number_of_causal_SNPs the total number of causal SNPs
 #' @param nblocks the number of independent LD blocks 
