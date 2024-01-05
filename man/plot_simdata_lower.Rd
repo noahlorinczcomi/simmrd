@@ -7,11 +7,17 @@
 plot_simdata_lower(data, params = params, showFstat = TRUE)
 }
 \arguments{
-\item{data}{direct output from generate()}
+\item{data}{direct output from \code{generate()}}
+
+\item{params}{Named list of parameters}
+
+\item{showFstat}{Logical, default \code{TRUE}}
 }
 \description{
 Helper function
 }
 \examples{
-# plot_simdata_lower()
+\dontrun{
+plot_simdata_lower()
+}
 }

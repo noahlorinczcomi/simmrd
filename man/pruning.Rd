@@ -14,8 +14,10 @@ pruning(jointPs, R, r2)
 \item{r2}{upper squared LD r2 threshold for pruning}
 }
 \description{
-Helper function
+Pruning SNPs
 }
 \examples{
-# pruning()
+\dontrun{
+pruning()
+}
 }

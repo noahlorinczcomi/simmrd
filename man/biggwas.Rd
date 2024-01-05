@@ -15,5 +15,7 @@ biggwas(x, G)
 Helper function
 }
 \examples{
-# biggwas()
+\dontrun{
+biggwas()
+}
 }

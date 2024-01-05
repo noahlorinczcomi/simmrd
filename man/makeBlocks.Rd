@@ -14,8 +14,10 @@ makeBlocks(LD_causal_SNPs, number_of_causal_SNPs, nblocks = 1)
 \item{nblocks}{the number of independent LD blocks}
 }
 \description{
-Helper function
+Helper function to make LD blocks
 }
 \examples{
-# makeBlocks()
+\dontrun{
+makeBlocks()
+}
 }

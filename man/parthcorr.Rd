@@ -15,5 +15,7 @@ parthcorr(x, n)
 Helper function
 }
 \examples{
-# parthcorr()
+\dontrun{
+parthcorr()
+}
 }

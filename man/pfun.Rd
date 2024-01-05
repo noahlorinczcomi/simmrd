@@ -7,11 +7,21 @@
 pfun(x, y, chpix, uhpix, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{x}
+
+\item{y}{y}
+
+\item{chpix}{chipx}
+
+\item{uhpix}{uhpix}
+
+\item{...}{Additional arguments passed to \code{plot()}}
 }
 \description{
 Helper function
 }
 \examples{
-# pfun()
+\dontrun{
+pfun()
+}
 }

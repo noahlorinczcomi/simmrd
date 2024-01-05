@@ -6,9 +6,18 @@
 \usage{
 setf(bxunstd, nX, fix_Fstatistic_at)
 }
+\arguments{
+\item{bxunstd}{bxunstd}
+
+\item{nX}{nX}
+
+\item{fix_Fstatistic_at}{Value to fix the F-statistic at}
+}
 \description{
 Helper function
 }
 \examples{
-# setf()
+\dontrun{
+setf()
+}
 }
