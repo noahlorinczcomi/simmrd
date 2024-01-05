@@ -557,7 +557,7 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
 
 #' Pruning SNPs
 #'
-#' Helper function
+#' Pruning SNPs
 #' @param jointPs joint p-degree of freedom chi-square tests for IVs
 #' @param R LD correlation matrix for SNPs
 #' @param r2 upper squared LD r2 threshold for pruning
