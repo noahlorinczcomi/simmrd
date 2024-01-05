@@ -532,14 +532,14 @@ pfun=function(x,y,chpix,uhpix,...) {
 #' Helper function
 #'
 #' Helper function
-#' @param bx 
-#' @param by
-#' @param bxse
-#' @param byse
-#' @param maf
-#' @param nx
-#' @param ny
-#' @param MR_standardization_type
+#' @param bx bx
+#' @param by by
+#' @param bxse bxse
+#' @param byse byse
+#' @param maf Minor allele frequency
+#' @param nx nx
+#' @param ny ny
+#' @param MR_standardization_type Standardization type
 #' @export
 #' @examples
 #' # parthstd()
