@@ -4,9 +4,9 @@ The steps to generating and plotting data using the `simmr` R package are the fo
     - The lists of parameters depends on the type of simulated data you ultimately want to generate. If you want to first generate individual-level data then use it to generate GWAS summary statistics. See 2) for more details.
 2) Give your list of parameters to either `generate_summary(params)` or `generate_individual(params)`.
 
-```R
 # Using generate_summary()
 Below is a named list of parameters to be used with the `generate_summary()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
+```r
 summary_params=list(
   sample_size_Xs=30000, # exposure GWAS sample sizes
   sample_size_Y=30000, # outcome GWAS sample size
@@ -35,14 +35,14 @@ summary_params=list(
   N_of_LD_ref=Inf # the sample size of the LD reference panel
 )
 ```
-```R
 To generate simulated GWAS summary statistics using these parameters and assign the data to the object `summary_data`, execute the following in R:
+```r
 gwas_data=generate_summary(summary_params)
 ```
 
-```R
 # Using generate_individual()
 Below is a named list of parameters to be used with the `generate_individual()` command. **The names of the parameters must not be changed. Change only the values assigned to each item**.
+```r
 individual_params=list(
     sample_size_Xs=5e4, # exposure GWAS sample sizes
     sample_size_Y=5e4, # outcome GWAS sample size
@@ -72,18 +72,18 @@ individual_params=list(
     fix_Fstatistic_at=10 # average across exposures using full MVMR IV set
 )
 ```
-```R
 To generate simulated GWAS summary statistics using these parameters and assign the data to the object `summary_data`, execute the following in R:
+```r
 gwas_data=generate_individual(individual_params)
 ```
 # Plotting simulated data
-```R
 If you used `generate_summary()`, execute the following in R:
+```r
 plot_simdata(gwas_data,summary_params) 
 ```
 ![](p1.svg)
-```R
 If you used `generate_individual()`, execute the following in R:
+```r
 plot_simdata(gwas_data,individual_params) 
 ```
 ![](p2.svg)
