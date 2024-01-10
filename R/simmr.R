@@ -57,7 +57,7 @@ generate_individual=function(params){
            "\t- `number_of_CHP_causal_SNPs`\n")
     }
     if(length(Y_variance_explained_by_Xs)==1) Y_variance_explained_by_Xs=rep(Y_variance_explained_by_Xs,number_of_exposures)
-    if(length(prop_gwas_overlap_Xs_and_Y)==1) prop_gwas_overlap_Xs_and_Y=rep(prop_gwas_overlap_Xs_and_Y,number_of_exposures)
+    #if(length(prop_gwas_overlap_Xs_and_Y)==1) prop_gwas_overlap_Xs_and_Y=rep(prop_gwas_overlap_Xs_and_Y,number_of_exposures)
   # generate data
     n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
     nall=sample_size_Y+sample_size_Xs-n0_xy
