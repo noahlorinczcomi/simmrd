@@ -1,5 +1,5 @@
-Package: simmr
-Title: Generate Mendelian Randomization Simulation Data
+Package: simmrd
+Title: Simulation of Mendelian Randomization data
 Version: 0.0.0.9000
 Authors@R:
     person("Noah", "Lorincz-Comi", , "noahlorinczcomi@gmail.com", role = c("aut", "cre"),
