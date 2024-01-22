@@ -1,21 +1,21 @@
-# Installing `simmr`
+# Installing `simmrd`
 In R, type
 ```R
-remotes::install_github('noahlorinczcomi/simmr')
+remotes::install_github('noahlorinczcomi/simmrd')
 ```
 or
 ```R
-devtools::install_github('noahlorinczcomi/simmr')
+devtools::install_github('noahlorinczcomi/simmrd')
 ```
 # Paper
 The paper has changed substantially from the version which is publicly available as a [preprint](https://doi.org/10.1101/2023.09.11.556975) and will be published in the journal of Genetic Epidemiology.
 
 # Tutorial
-Please follow our [Tutorial](https://github.com/noahlorinczcomi/simmr/wiki/Tutorial) to learn how to generate GWAS summary data for use in MR simulations.
+Please follow our [Tutorial](https://github.com/noahlorinczcomi/simmrd/wiki/Tutorial) to learn how to generate GWAS summary data for use in MR simulations.
 # Output
-It is shown in the [Tutorial](https://github.com/noahlorinczcomi/simmr/wiki/Tutorial) that the output of either `generate_summary()` or `generate_individual()` is a named list with the following elements:
+It is shown in the [Tutorial](https://github.com/noahlorinczcomi/simmrd/wiki/Tutorial) that the output of either `generate_summary()` or `generate_individual()` is a named list with the following elements:
 1. `bx`: $m\times p$ matrix of standardized GWAS-estimated associations between the $m$ IVs and $p$ exposures 
-   - The type of standardization is specified by the user with the `MR_standardization` item in their list of parameters (see the [Tutorial](https://github.com/noahlorinczcomi/simmr/wiki/Tutorial)
+   - The type of standardization is specified by the user with the `MR_standardization` item in their list of parameters (see the [Tutorial](https://github.com/noahlorinczcomi/simmrd/wiki/Tutorial)
 2. `by`: $m\times 1$ vector of standardized GWAS-estimated associations between the $m$ IVs and outcome
 3. `bxse`: $m\times p$ matrix of estimated standard errors corresponding to `bx`
 4. `byse`: $m\times 1$ vector of estimated standard errors corresponding to `by`
