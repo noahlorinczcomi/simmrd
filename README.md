@@ -8,8 +8,7 @@ or
 devtools::install_github('noahlorinczcomi/simmrd')
 ```
 # Paper
-The paper has changed substantially from the version which is publicly available as a [preprint](https://doi.org/10.1101/2023.09.11.556975) and will be published in the journal of Genetic Epidemiology.
-
+Lorincz-Comi, N., Yang, Y., & Zhu, X. simmrd: An open-source tool to perform simulations in Mendelian randomization. Genetic epidemiology, _1-15_. [doi.org/10.1101/2023.09.11.556975](doi.org/10.1101/2023.09.11.556975)
 # Tutorial
 Please follow our [Tutorial](https://github.com/noahlorinczcomi/simmrd/wiki/Tutorial) to learn how to generate GWAS summary data for use in MR simulations.
 # Output
