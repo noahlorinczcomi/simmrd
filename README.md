@@ -1,3 +1,5 @@
+```simmrd``` is an R package that can be used to generate simulated data for univariable or multivariable Mendelian Randomization (MR) under various conditions of weak instrument bias, GWAS sample overlap, uncorrelated horizontal pleiotropy, and correlated horizontal pleiotropy. These data are intended to be used to evaluate the statistical properties of existing or candidiate MR methods.
+
 # Installing `simmrd`
 In R, type
 ```R
