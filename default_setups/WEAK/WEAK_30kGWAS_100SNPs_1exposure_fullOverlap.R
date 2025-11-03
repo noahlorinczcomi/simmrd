@@ -6,8 +6,8 @@ summary_params=list(
   sample_size_Xs=30000, # exposure GWAS n's (scalar or vector)
   sample_size_Y=30000, # outcome GWAS n
   prop_gwas_overlap_Xs_and_Y=1, # proportion of overlap between exposures and outcome GWAS (scalar or vector)
-  number_of_exposures=1, # number of exposures
   number_of_causal_SNPs=100, # number of SNPs causing each exposure
+  number_of_exposures=1, # number of exposures
   number_of_UHP_causal_SNPs=0, # number of UHP causal SNPs
   number_of_CHP_causal_SNPs=0, # number of CHP causal SNPs
   ratio_of_UHP_variance=0, # ratio of UHP variance to valid IV variance
@@ -30,5 +30,3 @@ summary_params=list(
   LD_pruning_r2=1, # the upper LD r2 pruning threshold for SNPs to be considered as IVs
   N_of_LD_ref=Inf # the sample size of the LD reference panel for estimating LD between IVs
 )
-data=generate_summary(summary_params)
-plot_simdata(data,summary_params)
