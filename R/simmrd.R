@@ -38,7 +38,8 @@
 #'   )
 #' gwas_data <- generate_individual(individual_params)
 #' }
-generate_individual=function(params){
+generate_individual=function(params, seed=1){
+    set.seed(seed)
   # assign values in params to local environment
     for(i in 1:length(params)) assign(names(params)[i],params[[i]])
   # make sure user specified reasonable values
@@ -259,7 +260,8 @@ generate_individual=function(params){
 #'   )
 #' gwas_data <- generate_summary(summary_params)
 #' }
-generate_summary=function(params) {
+generate_summary=function(params,seed=1) {
+  set.seed(seed)
   # assign values in params to local environment
   for(i in 1:length(params)) assign(names(params)[i],params[[i]])
   ### checks to make sure input makes sense
