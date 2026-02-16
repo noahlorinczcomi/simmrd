@@ -260,8 +260,7 @@ generate_individual=function(params, seed=1){
 #'   )
 #' gwas_data <- generate_summary(summary_params)
 #' }
-generate_summary=function(params,seed=1) {
-  set.seed(seed)
+generate_summary=function(params) {
   # assign values in params to local environment
   for(i in 1:length(params)) assign(names(params)[i],params[[i]])
   ### checks to make sure input makes sense
@@ -408,7 +407,25 @@ generate_summary=function(params,seed=1) {
   # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
   nn=c('Outcome',paste0('Exposure',1:p))
   rownames(RhoME)=colnames(RhoME)=nn
-  out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=true_causal_effects,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd)
+  out=list(
+    bx=bx,
+    bxse=bxse,
+    by=by,
+    byse=byse,
+    RhoME=RhoME,
+    LDMatrix=R0,
+    LDhatMatrix=R,
+    theta=true_causal_effects,
+    IVtype=IVtype,
+    bx_unstd=bx_unstd,
+    bxse_unstd=bxse_unstd,
+    by_unstd=by_unstd,
+    byse_unstd=byse_unstd,
+    beta_true=B,
+    alpha_true=a,
+    u=bxunstd_all-B,
+    v=byunstd_all-a,
+    iv_index=ix)
   return(out)
 }
 
