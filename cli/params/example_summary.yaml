@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# simmrd parameter file — summary-level data
+#
+# Run with:
+#   pixi run simulate --params params/example_summary.yaml --output results.rds
+#
+# All parameters map directly to set_params() arguments.
+# Omitted parameters take their set_params() defaults; see ?set_params.
+# ---------------------------------------------------------------------------
+
+type: summary
+
+# --- Study design ----------------------------------------------------------
+sample_size_Xs: 100000       # exposure GWAS sample size
+sample_size_Y:  100000       # outcome  GWAS sample size
+number_of_exposures:    1
+number_of_causal_SNPs: 100   # SNPs with a direct effect on each exposure
+
+# --- GWAS overlap ----------------------------------------------------------
+prop_gwas_overlap_Xs_and_Y: 1   # 1 = full overlap, 0 = no overlap
+prop_gwas_overlap_Xs:       1
+
+# --- Pleiotropy ------------------------------------------------------------
+number_of_UHP_causal_SNPs: 0
+number_of_CHP_causal_SNPs: 0
+ratio_of_UHP_variance:     0
+ratio_of_CHP_variance:     0
+CHP_correlation:           0
+
+# --- Causal effects --------------------------------------------------------
+true_causal_effects: 0.3        # scalar or list, e.g. [0.3, 0.1] for 2 exposures
+
+# --- Genetic architecture --------------------------------------------------
+Xs_variance_explained_by_g: 0.10
+LD_causal_SNPs:   "I"           # "I"=independent, "ar1(0.5)", "cs(0.3)", etc.
+number_of_LD_blocks: 1
+
+# --- Correlations ----------------------------------------------------------
+phenotypic_correlation_Xs:        0.3
+genetic_correlation_Xs:           0.15
+phenotypic_correlations_Xs_and_Y: 0.3
+
+# --- IV selection ----------------------------------------------------------
+simtype:                winners   # "winners" (P-value) or "weak" (fix F-stat)
+IV_Pvalue_threshold:    5.0e-8
+fix_Fstatistic_at:      10        # only used when simtype: weak
+MVMR_IV_selection_type: union     # "union" or "joint"
+LD_pruning_r2:          1
+
+# --- Output ----------------------------------------------------------------
+MR_standardization: none          # "none", "Z", or "QC"
+N_of_LD_ref:        .inf          # .inf = use true LD; integer = reference panel size
