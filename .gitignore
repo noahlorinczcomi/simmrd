@@ -3,3 +3,11 @@
 .RData
 .Ruserdata
 inst/doc
+
+# pixi environment and lock file
+cli/.pixi/
+cli/pixi.lock
+
+# simulation output files generated during testing / development
+*.rds
+*.Rds
