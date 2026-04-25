@@ -21,8 +21,7 @@ test_that("set_params validates bad inputs", {
 })
 
 test_that("list_presets returns invisibly and prints output", {
-  out <- expect_output(list_presets())
-  expect_type(invisible(out), "NULL")
+  expect_output(list_presets())
   opts <- list_presets()
   expect_named(opts, c("bias", "n", "snps", "exposures", "overlap"))
 })
