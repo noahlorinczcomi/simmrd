@@ -1,0 +1,19 @@
+R:
+  - changed-files:
+    - any-glob-to-any-file: ['R/**', 'NAMESPACE', 'DESCRIPTION']
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file: 'tests/**'
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: ['man/**', 'vignettes/**', 'docs/**', '*.md', 'README*']
+
+cli:
+  - changed-files:
+    - any-glob-to-any-file: 'cli/**'
+
+ci:
+  - changed-files:
+    - any-glob-to-any-file: '.github/**'

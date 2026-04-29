@@ -1,0 +1,35 @@
+[project]
+name        = "simmrd-cli"
+version     = "0.1.0"
+description = "Command-line interface for the simmrd R package"
+channels    = ["conda-forge"]
+platforms   = ["osx-arm64", "osx-64", "linux-64"]
+
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
+[dependencies]
+# R runtime + simmrd's declared Imports
+r-base    = ">=4.3"
+r-ggplot2 = "*"
+r-ggpubr  = "*"
+r-mvnfast = "*"
+# CLI helpers used by runner.R
+r-yaml    = "*"
+r-optparse = "*"
+# needed to install simmrd from local source (see `setup` task)
+r-remotes = "*"
+# Python is the CLI entry point; only stdlib is used so no extra packages needed
+python = ">=3.11"
+
+# ---------------------------------------------------------------------------
+# Tasks
+# ---------------------------------------------------------------------------
+[tasks]
+# Run once after cloning to install simmrd from the parent package source.
+setup = { cmd = "Rscript -e \"remotes::install_local('..')\"", description = "Install simmrd from source" }
+
+# Run a simulation.  Extra flags are forwarded to simmrd_cli.py automatically.
+#   pixi run simulate --params params/example_summary.yaml --output results.rds
+#   pixi run simulate --params params/example_summary.yaml --output results.rds --seed 42
+simulate = { cmd = "python simmrd_cli.py", description = "Run an simmrd simulation" }

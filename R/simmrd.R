@@ -1,42 +1,44 @@
-#' An Individual-Level Data-Generating Function
+#' Generate individual-level simulated GWAS data
 #'
-#' This function generates simulated individual-level and data given a list of parameters
-#' @param params List of parameters used to generate simulated data
-#' @keywords data
-#' @export 
+#' Generates simulated individual-level GWAS data for Mendelian Randomization
+#' evaluation given a parameter list produced by \code{\link{set_params}}.
+#'
+#' @param params Named parameter list from \code{\link{set_params}}.
+#' @param seed Integer seed passed to \code{set.seed()}, or \code{NULL} to
+#'   use the current RNG state. Defaults to \code{1}.
+#' @return A named list with elements:
+#'   \describe{
+#'     \item{bx}{m x p matrix of IV-exposure associations}
+#'     \item{bxse}{Standard errors for \code{bx}}
+#'     \item{by}{m x 1 vector of IV-outcome associations}
+#'     \item{byse}{Standard errors for \code{by}}
+#'     \item{RhoME}{(p+1) x (p+1) measurement-error correlation matrix}
+#'     \item{LDMatrix}{True LD correlation matrix among IVs}
+#'     \item{LDhatMatrix}{Estimated LD correlation matrix among IVs}
+#'     \item{theta}{True causal effects}
+#'     \item{IVtype}{Per-IV classification: "valid", "UHP", or "CHP"}
+#'     \item{bx_unstd}{Unstandardized version of \code{bx}}
+#'     \item{bxse_unstd}{Standard errors for \code{bx_unstd}}
+#'     \item{by_unstd}{Unstandardized version of \code{by}}
+#'     \item{byse_unstd}{Standard errors for \code{by_unstd}}
+#'   }
+#' @seealso \code{\link{set_params}}, \code{\link{generate_summary}},
+#'   \code{\link{plot_simdata}}
+#' @export
 #' @import mvnfast
 #' @examples
 #' \dontrun{
-#' individual_params <-
-#'   list(
-#'     sample_size_Xs = 5e4, # exposure GWAS sample sizes
-#'     sample_size_Y = 5e4, # outcome GWAS sample size
-#'     prop_gwas_overlap_Xs_and_Y = 0.5, # proportion of exposure and outcome GWAS overlap
-#'     number_of_exposures = 2, # 4 number of exposures
-#'     phenotypic_correlation_Xs = 0.2, # phenotypic correlation between exposures
-#'     genetic_correlation_Xs = 0, # genetic correlation between exposures
-#'     Xs_variance_explained_by_U = 1/4 - 0.12, # exposures variance explained by confounder
-#'     Y_variance_explained_by_Xs = c(0, 0.5), # outcome variance explained by exposures
-#'     signs_of_causal_effects = c(1, 1), # signs of causal effects
-#'     Y_variance_explained_by_U = 0.1, # outcome variance explained by confounder
-#'     number_of_causal_SNPs = 200, # number of SNPs causing exposures
-#'     mafs_of_causal_SNPs = stats::runif(100, 0.1, 0.5), # minor allele frequency of causal SNPs
-#'     Xs_variance_explained_by_g = 0.12, # exposures variance explained by SNPs 
-#'     number_of_UHP_causal_SNPs = 30, # number of UHP exposure SNPs
-#'     number_of_CHP_causal_SNPs = 10, # number of CHP exposure SNPs
-#'     Y_variance_explained_by_UHP = 0.05, # outcome variance explained by UHP SNPs
-#'     U_variance_explained_by_CHP = 0.05, # outcome variance explained by CHP SNPs
-#'     LD_causal_SNPs = 'I', # independent causal exposure SNPs
-#'     number_of_LD_blocks = 1, # number of independent LD blocks
-#'     MR_standardization = 'Z', # standardization of GWAS summary statistics 
-#'     simtype = 'weak', # simulation performed using weak instruments
-#'     MVMR_IV_selection_type = 'joint', # P-values for IV selection based on joint test for exposures
-#'     IV_Pvalue_threshold = 1, # P-value threshold for candidate IVs
-#'     LD_pruning_r2 = 1, # upper boundary of squared LD correlation
-#'     N_of_LD_ref = Inf, # size of the LD reference panel
-#'     fix_Fstatistic_at = 10 # average across exposures using full MVMR IV set
-#'   )
-#' gwas_data <- generate_individual(individual_params)
+#' params <- set_params(
+#'   type                       = "individual",
+#'   number_of_exposures        = 2,
+#'   Y_variance_explained_by_Xs = c(0, 0.5),
+#'   signs_of_causal_effects    = c(1, 1),
+#'   Xs_variance_explained_by_U = 0.12,
+#'   Y_variance_explained_by_U  = 0.10,
+#'   simtype                    = "weak",
+#'   fix_Fstatistic_at          = 10
+#' )
+#' data <- generate_individual(params)
 #' }
 generate_individual=function(params, seed=1){
     set.seed(seed)
@@ -46,7 +48,7 @@ generate_individual=function(params, seed=1){
     exposure_lengths=c(number_of_exposures,length(Y_variance_explained_by_Xs),length(signs_of_causal_effects))
     if(exposure_lengths[1]<exposure_lengths[2] | exposure_lengths[1]<exposure_lengths[3]) {
       stop("please make sure the parameters for the following values each have the same length:\n",
-           "\t- `sample_size_Xs`\n",
+           "\t- `number_of_exposures`\n",
            "\t- `Y_variance_explained_by_Xs`\n",
            "\t- `signs_of_causal_effects`\n")
     }
@@ -58,7 +60,6 @@ generate_individual=function(params, seed=1){
            "\t- `number_of_CHP_causal_SNPs`\n")
     }
     if(length(Y_variance_explained_by_Xs)==1) Y_variance_explained_by_Xs=rep(Y_variance_explained_by_Xs,number_of_exposures)
-    #if(length(prop_gwas_overlap_Xs_and_Y)==1) prop_gwas_overlap_Xs_and_Y=rep(prop_gwas_overlap_Xs_and_Y,number_of_exposures)
   # generate data
     n0_xy=floor(prop_gwas_overlap_Xs_and_Y*min(c(sample_size_Y,sample_size_Xs)))
     nall=sample_size_Y+sample_size_Xs-n0_xy
@@ -86,7 +87,6 @@ generate_individual=function(params, seed=1){
     CorrXX=parthcorr(phenotypic_correlation_Xs,n=number_of_exposures)
     GenCorrXX=parthcorr(genetic_correlation_Xs,n=number_of_exposures)
     LD=makeBlocks(LD_causal_SNPs,number_of_causal_SNPs,number_of_LD_blocks)
-    # LD=parthcorr(LD_causal_SNPs,number_of_causal_SNPs)
     K=kronecker(GenCorrXX,LD)
     Thsq=chol(solve(LD))
     B=mvnfast::rmvn(1,rep(0,dim(K)[1]),K) # can effectively add LD the G by adding LD to B
@@ -94,9 +94,7 @@ generate_individual=function(params, seed=1){
     if(length(chpix)>0) B[nrow(B):(nrow(B)-length(chpix)),]=0
     th=chol(solve(GenCorrXX))
     cop=stats::pnorm(B%*%th)
-    #stats::cor(cop)
     cop=cop%*%chol(GenCorrXX)
-    #list(gencor=round(GenCorrXX,2),cop=round(stats::cor(cop),2),corB=round(stats::cor(B),2))
     # rescale to match heritability
     adj=Xs_variance_explained_by_g/colSums(B^2)
     for(i in 1:ncol(B)) B[,i]=sqrt(adj[i])*B[,i]
@@ -109,7 +107,6 @@ generate_individual=function(params, seed=1){
     X=G%*%B+matrix(pix*U,nrow=nall,ncol=number_of_exposures)+eX
     ### model for Y
     vXY=Y_variance_explained_by_Xs
-    #theta=vXY*signs_of_causal_effects
     theta=vXY*rep(1,number_of_exposures)*(length(vXY)==1)+vXY*(length(vXY)>1)
     theta=theta*signs_of_causal_effects
     adj=vXY/sum(theta^2)
@@ -135,7 +132,6 @@ generate_individual=function(params, seed=1){
     vUHPY=Y_variance_explained_by_UHP
     eY=stats::rnorm(nall,0,sqrt(1-vXY-vUHPY-piy^2))
     etaX=X%*%theta
-    #if(length(chpix)>0) etaX[which(gammaC!=0)]=0
     Y=etaX+piy*U+G%*%gammaU+eY
     cyx=c(stats::cov(X,Y))
     rho2=t(cyx)%*%solve(stats::cov(X))%*%cyx
@@ -208,59 +204,61 @@ generate_individual=function(params, seed=1){
     bx_unstd=as.matrix(bx_unstd[ix,]); bxse_unstd=as.matrix(bxse_unstd[ix,])
     by_unstd=by_unstd[ix]; byse_unstd=byse_unstd[ix]
     # if only have one IV selected
-    if(length(by)==1) {bx=t(bx);bxse=t(bxse);bx_unstd=t(bx_unstd);bxse_unstd=t(bxse_unstd)} 
-    # verify weak IV set
-    # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
-    # h2=colSums(bx_unstd^2)
-    # (meff=nrow(bx_unstd))
-    # (nX-meff-1)/meff*h2/(1-h2)
-    # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
+    if(length(by)==1) {bx=t(bx);bxse=t(bxse);bx_unstd=t(bx_unstd);bxse_unstd=t(bxse_unstd)}
     nn=c('Outcome',paste0('Exposure',1:p))
     rownames(RhoME)=colnames(RhoME)=nn
     out=list(bx=bx,bxse=bxse,by=by,byse=byse,RhoME=RhoME,LDMatrix=R0,LDhatMatrix=R,theta=theta,IVtype=IVtype,bx_unstd=bx_unstd,bxse_unstd=bxse_unstd,by_unstd=by_unstd,byse_unstd=byse_unstd)
     return(out)
 }
 
-#' An Summary Statistic Data-Generating Function
+#' Generate summary-level simulated GWAS data
 #'
-#' This function generates simulated summary-level and data given a list of parameters
-#' @param params List of parameters used to generate simulated data
-#' @keywords data
-#' @export 
+#' Generates simulated GWAS summary statistics for Mendelian Randomization
+#' evaluation given a parameter list produced by \code{\link{set_params}}.
+#'
+#' @param params Named parameter list from \code{\link{set_params}}.
+#' @param seed Integer seed passed to \code{set.seed()}, or \code{NULL} to
+#'   use the current RNG state. Defaults to \code{NULL}.
+#' @return A named list with elements:
+#'   \describe{
+#'     \item{bx}{m x p matrix of IV-exposure associations}
+#'     \item{bxse}{Standard errors for \code{bx}}
+#'     \item{by}{m x 1 vector of IV-outcome associations}
+#'     \item{byse}{Standard errors for \code{by}}
+#'     \item{RhoME}{(p+1) x (p+1) measurement-error correlation matrix}
+#'     \item{LDMatrix}{True LD correlation matrix among IVs}
+#'     \item{LDhatMatrix}{Estimated LD correlation matrix among IVs}
+#'     \item{theta}{True causal effects}
+#'     \item{IVtype}{Per-IV classification: "valid", "UHP", or "CHP"}
+#'     \item{bx_unstd}{Unstandardized version of \code{bx}}
+#'     \item{bxse_unstd}{Standard errors for \code{bx_unstd}}
+#'     \item{by_unstd}{Unstandardized version of \code{by}}
+#'     \item{byse_unstd}{Standard errors for \code{by_unstd}}
+#'     \item{beta_true}{True SNP-exposure effect sizes (all SNPs, before IV selection)}
+#'     \item{alpha_true}{True SNP-outcome associations (all SNPs, before IV selection)}
+#'     \item{u}{Exposure GWAS estimation errors (\code{bx_unstd - beta_true}, all SNPs)}
+#'     \item{v}{Outcome GWAS estimation errors (\code{by_unstd - alpha_true}, all SNPs)}
+#'     \item{iv_index}{Integer indices of the selected IVs within the full SNP set}
+#'   }
+#' @seealso \code{\link{set_params}}, \code{\link{generate_individual}},
+#'   \code{\link{plot_simdata}}
+#' @export
 #' @import mvnfast
 #' @examples
 #' \dontrun{
-#' summary_params <-
-#'   list(
-#'     sample_size_Xs = 30000, # exposure GWAS sample sizes
-#'     sample_size_Y = 30000, # outcome GWAS sample size
-#'     prop_gwas_overlap_Xs_and_Y = 1, # proportion of exposures' and outcome GWAS overlap
-#'     number_of_exposures = 3, # number of exposures
-#'     number_of_causal_SNPs = 100, # number of SNPs causing each exposure
-#'     number_of_UHP_causal_SNPs = 0, # number of UHP causal SNPs
-#'     number_of_CHP_causal_SNPs = 20, # number of CHP causal SNPs
-#'     ratio_of_UHP_variance = 0.15, # ratio of UHP variance to valid IV variance
-#'     ratio_of_CHP_variance = 0.25, # ratio of CHP variance to valid IV variance
-#'     CHP_correlation = -0.5, # correlation between CHP and valid IV effect sizes
-#'     simtype = 'winners', # performs IV selection based on P-value
-#'     fix_Fstatistic_at = 10, # ignored because simtype='winners'
-#'     prop_gwas_overlap_Xs = 1, # overlap of exposures' GWAS
-#'     phenotypic_correlation_Xs = 0.3, # phenotypic correlations between exposures
-#'     genetic_correlation_Xs = 0.15,  # genetic correlation between exposures
-#'     phenotypic_correlations_Xs_and_Y = 0.3, # phenotypic correlations b/w exposures and outcome
-#'     true_causal_effects = 0.3, # true causal effect sizes
-#'     Xs_variance_explained_by_g = 0.10, # exposure variance explained by SNPs
-#'     LD_causal_SNPs = 'ar1(0.5)', # LD between causal exposure SNPs
-#'     number_of_LD_blocks = 3, # number of independent LD blocks
-#'     MR_standardization = 'none', # does not standardize GWAS estimates
-#'     MVMR_IV_selection_type = 'union', # SNPs associated with >0 exposures are candidate IVs
-#'     IV_Pvalue_threshold = 5e-8, # only SNPs with P<this threshold are candidate IVs
-#'     LD_pruning_r2 = 1, # the upper LD r2 pruning threshold for candidate IVs
-#'     N_of_LD_ref = Inf # the sample size of the LD reference panel
-#'   )
-#' gwas_data <- generate_summary(summary_params)
+#' # Two exposures with CHP, no GWAS overlap
+#' params <- set_params(
+#'   number_of_exposures        = 2,
+#'   true_causal_effects        = c(0.3, 0.1),
+#'   prop_gwas_overlap_Xs_and_Y = 0,
+#'   number_of_CHP_causal_SNPs  = 20,
+#'   ratio_of_CHP_variance      = 0.25,
+#'   CHP_correlation            = -0.5
+#' )
+#' data <- generate_summary(params)
 #' }
-generate_summary=function(params) {
+generate_summary=function(params, seed=NULL) {
+  if (!is.null(seed)) set.seed(seed)
   # assign values in params to local environment
   for(i in 1:length(params)) assign(names(params)[i],params[[i]])
   ### checks to make sure input makes sense
@@ -335,10 +333,6 @@ generate_summary=function(params) {
   bxse=sqrt(bxse)
   byse=stats::rchisq(number_of_causal_SNPs,sample_size_Y-1)/(sample_size_Y-1)/sample_size_Y
   byse=sqrt(byse)
-  # cols=rep('black',number_of_causal_SNPs)
-  # cols[IVtype=='UHP']='red'
-  # cols[IVtype=='CHP']='blue'
-  # plot(bhat%*%true_causal_effects,ahat,pch=3,col=cols)
   ### IV selection
   ### standardize?
   bx_unstd=bx; bxse_unstd=bxse; by_unstd=by; byse_unstd=byse
@@ -398,13 +392,7 @@ generate_summary=function(params) {
   bx_unstd=as.matrix(bx_unstd[ix,]); bxse_unstd=as.matrix(bxse_unstd[ix,])
   by_unstd=by_unstd[ix]; byse_unstd=byse_unstd[ix]
   # if only one IV selected
-  if(mIVs==1) {bx=t(bx);bxse=t(bxse);bx_unstd=t(bx_unstd);bxse_unstd=t(bxse_unstd)} 
-  # verify weak IV set
-  # plot(fs);abline(v=which.min(abs(fix_Fstatistic_at-fs)));abline(h=fix_Fstatistic_at)
-  # h2=colSums(bx_unstd^2)
-  # (meff=nrow(bx_unstd))
-  # (nX-meff-1)/meff*h2/(1-h2)
-  # abline(h=mean((nX-meff-1)/meff*h2/(1-h2)),col='red')
+  if(mIVs==1) {bx=t(bx);bxse=t(bxse);bx_unstd=t(bx_unstd);bxse_unstd=t(bxse_unstd)}
   nn=c('Outcome',paste0('Exposure',1:p))
   rownames(RhoME)=colnames(RhoME)=nn
   out=list(
@@ -429,12 +417,17 @@ generate_summary=function(params) {
   return(out)
 }
 
-#' Helper function
+#' Construct a GWAS overlap proportion matrix
 #'
-#' Helper function
-#' @param exposure_overlap_proportions scalar or matrix of overlap proportions between exposures GWAS
-#' @param prop_gwas_overlap_Xs_and_Y scalar or vector of overlap proportions between exposures and outcome GWAS
-#' @param number_of_exposures number of exposures
+#' Returns the (p+1) x (p+1) matrix of pairwise GWAS sample overlap proportions
+#' for use as the \code{prop_gwas_overlap_Xs} argument of \code{\link{set_params}}
+#' when exposure GWAS samples partially overlap each other and the outcome GWAS.
+#'
+#' @param exposure_overlap_proportions Scalar or matrix of overlap proportions between exposure GWAS.
+#' @param prop_gwas_overlap_Xs_and_Y Scalar or vector of overlap proportions between exposures and outcome GWAS.
+#' @param number_of_exposures Number of exposures.
+#' @return A named (p+1) x (p+1) matrix where rows/columns are labelled
+#'   \code{"Outcome"}, \code{"Exposure1"}, etc.
 #' @export
 #' @examples
 #' adj_overlap(
@@ -459,16 +452,7 @@ adj_overlap=function(exposure_overlap_proportions,prop_gwas_overlap_Xs_and_Y,num
 }
 
 
-#' Helper function
-#'
-#' Helper function
-#' @param x phenotype vector
-#' @param G genotype matrix 
-#' @export
-#' @examples
-#' \dontrun{
-#' biggwas()
-#' }
+#' @keywords internal
 biggwas=function(x,G){
   x=as.vector(x)
   ux=mean(x)
@@ -484,35 +468,13 @@ biggwas=function(x,G){
   return(A)
 }
 
-#' Helper function
-#'
-#' Helper function
-#' @param n The number of rows (and columns) of the matrix
-#' @param rho rho
-#' @export
-#' @examples
-#' ar1(2)
+#' @keywords internal
 ar1=function(n,rho=0.5) rho^stats::toeplitz(0:(n-1))
 
-#' Helper function
-#'
-#' Helper function
-#' @param x Vector to standardise
-#' @export
-#' @examples
-#' std(0:10)
+#' @keywords internal
 std=function(x) (x-mean(x))/stats::sd(x)
 
-#' Helper function
-#'
-#' Helper function
-#' @param x Matrix or numeric value
-#' @param n Number of rows and columns of the matrix
-#' @export
-#' @examples
-#' \dontrun{
-#' parthcorr()
-#' }
+#' @keywords internal
 parthcorr=function(x,n) {
   if(is.matrix(x)) return(x)
   if(is.numeric(x)) {M=matrix(x,n,n);diag(M)=1;return(M)}
@@ -524,19 +486,7 @@ parthcorr=function(x,n) {
   return(diag(n))
 }
 
-#' Helper function
-#'
-#' Helper function
-#' @param x x
-#' @param y y
-#' @param chpix chipx
-#' @param uhpix uhpix
-#' @param ... Additional arguments passed to \code{plot()}
-#' @export
-#' @examples
-#' \dontrun{
-#' pfun()
-#' }
+#' @keywords internal
 pfun=function(x,y,chpix,uhpix,...) {
   plot(x,y,pch=16,col='gray80',...)
   lc=length(chpix)>0
@@ -548,22 +498,7 @@ pfun=function(x,y,chpix,uhpix,...) {
   if(lc & lu) graphics::legend('bottomright',c('CHP','UHP'),pch=c(16,16),col=c('royalblue','indianred'))
 }
 
-#' Helper function
-#'
-#' Helper function
-#' @param bx bx
-#' @param by by
-#' @param bxse bxse
-#' @param byse byse
-#' @param maf Minor allele frequency
-#' @param nx nx
-#' @param ny ny
-#' @param MR_standardization_type Standardization type
-#' @export
-#' @examples
-#' \dontrun{
-#' parthstd()
-#' }
+#' @keywords internal
 parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   mst=tolower(MR_standardization_type)
   if(mst=='none') return(list(bx=bx,bxse=bxse,by=by,byse=byse))
@@ -574,17 +509,7 @@ parthstd=function(bx,by,bxse,byse,maf,nx,ny,MR_standardization_type) {
   return(list(bx=bx,bxse=bxse,by=by,byse=byse))
 }
 
-#' Pruning SNPs
-#'
-#' Pruning SNPs
-#' @param jointPs joint p-degree of freedom chi-square tests for IVs
-#' @param R LD correlation matrix for SNPs
-#' @param r2 upper squared LD r2 threshold for pruning
-#' @export
-#' @examples
-#' \dontrun{
-#' pruning()
-#' }
+#' @keywords internal
 pruning=function(jointPs,R,r2) {
   R=as.matrix(R)
   n=nrow(R);
@@ -606,17 +531,7 @@ pruning=function(jointPs,R,r2) {
   return(keep)
 }
 
-#' Helper function
-#'
-#' Helper function
-#' @param ix ix
-#' @param uhpix uhpix
-#' @param chpix chpix
-#' @export
-#' @examples
-#' \dontrun{
-#' classIVs()
-#' }
+#' @keywords internal
 classIVs=function(ix,uhpix,chpix) {
   keys=c('UHP','CHP')
   ll=list(uhpix,chpix)
@@ -626,17 +541,7 @@ classIVs=function(ix,uhpix,chpix) {
   return(cl)
 }
 
-#' Helper function
-#'
-#' Helper function
-#' @param bxunstd bxunstd
-#' @param nX nX
-#' @param fix_Fstatistic_at Value to fix the F-statistic at
-#' @export
-#' @examples
-#' \dontrun{
-#' setf()
-#' }
+#' @keywords internal
 setf=function(bxunstd,nX,fix_Fstatistic_at) {
   # currently agnostic to LD structure
   # keeps only the weakest IVs
@@ -774,18 +679,7 @@ plot_simdata=function(data,params=params,exposure_specific_plot='total',verbose=
   }
 }
 
-#' A function to make LD blocks
-#'
-#' Helper function to make LD blocks
-#' @param LD_causal_SNPs the LD structure of the causal SNPs
-#' @param number_of_causal_SNPs the total number of causal SNPs
-#' @param nblocks the number of independent LD blocks 
-#' @import ggplot2 
-#' @export
-#' @examples
-#' \dontrun{
-#' makeBlocks()
-#' }
+#' @keywords internal
 makeBlocks=function(LD_causal_SNPs,number_of_causal_SNPs,nblocks=1) {
   m=number_of_causal_SNPs
   mat=matrix(0,m,m)
