@@ -104,8 +104,22 @@ CHP_correlation:            -0.5
 
 The output is an R list saved as an `.rds` file.
 
-- **Single replicate** (`--iterations 1`): a named list with elements `bx`, `bxse`, `by`, `byse`, `RhoME`, `LDMatrix`, `LDhatMatrix`, `theta`, `IVtype`, etc.
+- **Single replicate** (`--iterations 1`): a named list with the elements below.
 - **Multiple replicates** (`--iterations > 1`): a length-`n` list where each element is one replicate's named list.
+
+| Element | Description |
+|---------|-------------|
+| `bx` | $m \times p$ matrix of IV–exposure associations |
+| `by` | $m \times 1$ vector of IV–outcome associations |
+| `bxse` | Standard errors for `bx` |
+| `byse` | Standard errors for `by` |
+| `RhoME` | $(p+1) \times (p+1)$ measurement-error correlation matrix |
+| `LDMatrix` | True LD correlation matrix among IVs |
+| `LDhatMatrix` | Estimated LD correlation matrix among IVs |
+| `theta` | True causal effects |
+| `IVtype` | Per-IV classification: `"valid"`, `"UHP"`, or `"CHP"` |
+| `bx_unstd` / `by_unstd` | Unstandardized versions of `bx` / `by` |
+| `bxse_unstd` / `byse_unstd` | Standard errors for the unstandardized estimates |
 
 Read the output back in R:
 
