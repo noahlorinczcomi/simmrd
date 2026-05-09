@@ -1,3 +1,6 @@
+> [!NOTE]
+> `simmrd` can be run from the command line using `pixi` in the [`cli/`](cli/) repo. Follow the [link](cli)/ to learn more.
+
 # Overview
 
 `simmrd` is an R package for generating simulated GWAS data for univariable or multivariable Mendelian Randomization (MR) under various conditions of weak instrument bias, GWAS sample overlap, uncorrelated horizontal pleiotropy (UHP), and correlated horizontal pleiotropy (CHP).
