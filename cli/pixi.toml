@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name        = "simmrd-cli"
 version     = "0.1.0"
 description = "Command-line interface for the simmrd R package"
@@ -17,8 +17,6 @@ r-mvnfast = "*"
 # CLI helpers used by runner.R
 r-yaml    = "*"
 r-optparse = "*"
-# needed to install simmrd from local source (see `setup` task)
-r-remotes = "*"
 # Python is the CLI entry point; only stdlib is used so no extra packages needed
 python = ">=3.11"
 
@@ -27,7 +25,7 @@ python = ">=3.11"
 # ---------------------------------------------------------------------------
 [tasks]
 # Run once after cloning to install simmrd from the parent package source.
-setup = { cmd = "Rscript -e \"remotes::install_local('..')\"", description = "Install simmrd from source" }
+setup = { cmd = "R CMD INSTALL --no-build-vignettes ..", description = "Install simmrd from source" }
 
 # Run a simulation.  Extra flags are forwarded to simmrd_cli.py automatically.
 #   pixi run simulate --params params/example_summary.yaml --output results.rds

@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^cli$
+^cli(/|$)
 ^docs$
 ^LICENSE\.md$
 ^tutorial\.md$
