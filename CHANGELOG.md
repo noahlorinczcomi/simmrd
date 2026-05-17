@@ -4,6 +4,10 @@ All notable changes to this project are recorded here, organized by date.
 
 ---
 
+## 2026-05-17
+
+- [`df97a7b`](https://github.com/noahlorinczcomi/simmrd/commit/df97a7b) Fix `.Rbuildignore` pattern (`^cli$` → `^cli(/|$)`) so `R CMD build` correctly excludes the `cli/` subtree and its pixi environment; switch `pixi run setup` from `remotes::install_local` to `R CMD INSTALL --no-build-vignettes` to avoid a recursive source-copy that failed on broken symlinks
+
 ## 2026-05-08
 
 - [`c6b0e9a`](https://github.com/noahlorinczcomi/simmrd/commit/c6b0e9a37e1fbb0efc5722e26d5e55e766e0a172) docs: table of outputs
